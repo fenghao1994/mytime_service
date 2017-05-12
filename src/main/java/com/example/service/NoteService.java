@@ -127,6 +127,13 @@ public class NoteService {
         }
         return list;
     }
+
+    public boolean deleteNote(String phoneNumber, String id){
+        String sql = "UPDATE note SET isDelete = 1 WHERE phoneNumber = ? AND id = ?";
+        jdbcTemplate.update(sql, new Object[]{phoneNumber, id});
+        return true;
+    }
+
     public boolean saveFile(Note note, List<MultipartFile> files){
         if (note.getAddress() != null){
             for (int i = 0 ; i < note.getAddress().size(); i++){

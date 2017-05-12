@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -192,5 +193,27 @@ public class PlanItemController {
     public ResponseEntity<List<PlanItem>> getPlanItem(@RequestParam("phoneNumber") String phoneNumber){
         List<PlanItem> list = planItemService.getPlanItem(phoneNumber);
         return new ResponseEntity<List<PlanItem>>(list, HttpStatus.OK);
+    }
+
+    @RequestMapping("/deletePlanItem")
+    @ResponseBody
+    public String deletePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id){
+        boolean flag = planItemService.deletePlanItem(phoneNumber, id);
+        if (flag){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
+    }
+
+    @RequestMapping("/completePlanItem")
+    @ResponseBody
+    public String completePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id, @RequestParam("editTime") String editTime){
+        boolean flag = planItemService.completePlanItem(phoneNumber, id, editTime);
+        if (flag){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
     }
 }

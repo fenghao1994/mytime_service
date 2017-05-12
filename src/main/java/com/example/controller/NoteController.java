@@ -124,9 +124,19 @@ public class NoteController {
     }
     //获取note
     @RequestMapping("/getNote")
-    @ResponseBody
     public ResponseEntity<List<Note>> getNote(@RequestParam("phoneNumber") String phoneNumber){
         List<Note> list = noteService.getNote(phoneNumber);
         return new ResponseEntity<List<Note>>(list, HttpStatus.OK);
+    }
+
+    @RequestMapping("/deleteNote")
+    @ResponseBody
+    public String deleteNote(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id){
+        boolean flag = noteService.deleteNote(phoneNumber, id);
+        if (flag){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
     }
 }

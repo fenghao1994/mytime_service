@@ -207,4 +207,16 @@ public class PlanItemService {
         }
         return true;
     }
+
+    public boolean deletePlanItem(String phoneNumber, String id) {
+        String sql = "UPDATE planitem SET isDelete = 1 WHERE phoneNumber = ? AND id = ?";
+        jdbcTemplate.update(sql, new Object[]{phoneNumber, id});
+        return true;
+    }
+
+    public boolean completePlanItem(String phoneNumber, String id, String editTime) {
+        String sql = "UPDATE planitem SET isComplete = 1, editTime = ?  WHERE phoneNumber = ? AND id = ?";
+        jdbcTemplate.update(sql, new Object[]{editTime, phoneNumber, id});
+        return true;
+    }
 }
