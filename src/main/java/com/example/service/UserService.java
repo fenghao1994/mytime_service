@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * Created by fenghao on 2017/5/9.
@@ -108,7 +109,8 @@ public class UserService {
     //获取头像
     public String getHeadImg(String phoneNumber){
         String sql = "SELECT headImg FROM user WHERE phoneNumber = ?";
-        String path = jdbcTemplate.queryForObject(sql, new Object[]{phoneNumber}, String.class);
+        Map<String, Object> map = jdbcTemplate.queryForMap(sql, new Object[]{phoneNumber});
+        String path = (String) map.get("headImg");
         return path;
     }
 }
