@@ -86,10 +86,8 @@ public class UserInfoController {
 
     //获取头像
     @RequestMapping(value = "get/headimg", method = RequestMethod.POST)
-    public ResponseEntity<String> getHeadImg(@RequestParam("phoneNumber") String phoneNumber) {
+    public String getHeadImg(@RequestParam("phoneNumber") String phoneNumber) {
         String path = userService.getHeadImg(phoneNumber);
-        int num = path.indexOf("D");
-        path = path.substring(num + 2, path.length());
-        return new ResponseEntity<>("{\"msg\":" + path + "}", HttpStatus.OK);
+        return path;
     }
 }
