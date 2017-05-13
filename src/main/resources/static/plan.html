@@ -51,7 +51,7 @@
 									<td>{{x.editTime}}</td>
 									<td>
 										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
-										<a href =""  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">详情</a>
+										<a href ="planitem.html?planId={{x.planId}}&phoneNumber={{x.phoneNumber}}"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">详情</a>
 										<!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
 										<a ng-click="deletePlan(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>
@@ -97,13 +97,11 @@
 					});
 				}
 				$scope.deletePlan = function (idd) {
-					alert(idd);
 					$http({
 						method: 'POST',
 						url:'plan/root/deletePlamFromDisk',
-						data: {
-							idd: idd
-						}
+						data: "idd=" + idd,
+						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){
 						window.location.reload(true);
 					},function errorCallback(response){
@@ -115,9 +113,8 @@
 					$http({
 						method: 'POST',
 						url:'plan/getPlan',
-						data: {
-							phoneNumber: phoneNumber
-						}
+						data: "phoneNumber=" + phoneNumber,
+						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){
 						console.info(response);
 						$scope.plans = response.data;

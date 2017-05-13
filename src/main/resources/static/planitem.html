@@ -69,7 +69,7 @@
 									<td>{{x.editTime}}</td>
 									<td>
 										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
-										<a href ="photoshow.html?phoneNumber=(x.phoneNumber)&objectId=(x.address.objectId)&objectType=(x.address.objectType)"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>
+										<a href ="photoshow.html?phoneNumber={{x.phoneNumber}}&objectId={{x.address[0].objectId}}&objectType={{x.address[0].objectType}}"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>
 										<!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
 										<a ng-click="deletePlanItem(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>
@@ -101,12 +101,16 @@
 		<script type="text/javascript" src="plugins/layui/layui.js"></script>
 		<script>
 			var app = angular.module('allPlanItem', []);
-			var planId, phoneNumber;
 			app.controller('getAllPlanItem', function($scope, $http){
-				$scope.load = function(planId, phoneNumber) {
+				var url = getParams();
+				$scope.planId = url.planId;
+				$scope.phoneNumber = url.phoneNumber;
+				$scope.load = function() {
 					$http({
 						method: 'POST',
-						url:'planItem/getPlanItemWithPlanIdAndPhoneNumber'
+						url:'planItem/getPlanItemWithPlanIdAndPhoneNumber',
+						data:"planId=" + $scope.planId + "&phoneNumber=" + $scope.phoneNumber,
+						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){
 						console.info(response);
 						$scope.planItems = response.data;
@@ -115,36 +119,36 @@
 						console.info(response);
 					});
 				}
-				$scope.deleteNote = function (idd) {
+				$scope.deletePlanItem = function (idd) {
 					alert(idd);
 					$http({
 						method: 'POST',
-						url:'note/root/deleteNoteFromDisk',
-						data: {
-							idd: idd
-						}
+						url:'planItem/root/deletePlanItemFromDisk',
+						data: "idd=" + idd,
+						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){
+						alert("删除成功");
 						window.location.reload(true);
 					},function errorCallback(response){
+						alert("删除失败")
 						alert(response);
 					});
 				}
-				/*$scope.getNotesWithPhoneNumber = function (phoneNumber) {
-					alert(phoneNumber);
-					$http({
-						method: 'POST',
-						url:'note/getNote',
-						data: {
-							phoneNumber: phoneNumber
-						}
-					}).then(function successCallback(response){
-						console.info(response);
-						$scope.users = response.data;
-					},function errorCallback(response){
-						alert(response);
-					});*/
-//				}
 			});
+			function getParams() {
+				var search = location.search;
+				if (search && search.indexOf("?") == 0) {
+					search = search.substring(1);
+					var temp = search.split("&");
+					var object = {};
+					for (var i = 0, length = temp.length; i < length; i++) {
+						var item = temp[i];
+						var indexOfEqual = item.indexOf("=");
+						object[item.substring(0, indexOfEqual)] = item.substring(indexOfEqual + 1);
+					}
+					return object;
+				} else { return {}; }
+			};
 		</script>
 	</body>
 

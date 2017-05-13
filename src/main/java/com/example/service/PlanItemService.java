@@ -229,6 +229,7 @@ public class PlanItemService {
         if (mapArrayList != null && mapArrayList.size() > 0) {
             for (int i = 0; i < mapArrayList.size(); i++) {
                 PlanItem planItem = new PlanItem();
+                planItem.setIdd((Integer) mapArrayList.get(i).get("idd"));
                 planItem.setPhoneNumber((String) mapArrayList.get(i).get("phoneNumber"));
                 planItem.setId((Integer) mapArrayList.get(i).get("id"));
                 planItem.setPlanId((Long) mapArrayList.get(i).get("planId"));
@@ -308,5 +309,12 @@ public class PlanItemService {
             list.get(i).setAddress( photos);
         }
         return list;
+    }
+
+    public boolean deletePlanItemFromDisk(String idd) {
+        String sql = "DELETE FROM planitem WHERE idd = ?";
+        jdbcTemplate.update(sql, new Object[]{idd});
+        return true;
+
     }
 }

@@ -224,4 +224,14 @@ public class PlanItemController {
         list = planItemService.getPlanItemWithPlanIdAndPhoneNumber(phoneNumber, planId);
         return list;
     }
+
+    @RequestMapping("/root/deletePlanItemFromDisk")
+    public ResponseEntity<?> deletePlanItemFromDisk(@RequestParam("idd")String idd){
+        boolean flag = planItemService.deletePlanItemFromDisk(idd);
+        if (flag) {
+            return new ResponseEntity<String>("{\"msg\":\"删除成功\"}", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("{\"msg\":\"删除失败\"}", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

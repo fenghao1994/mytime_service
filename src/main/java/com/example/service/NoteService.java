@@ -233,6 +233,7 @@ public class NoteService {
         if (photoMap != null && photoMap.size() > 0){
             for (int j = 0 ; j < photoMap.size(); j++){
                 Photo photo = new Photo();
+                photo.setPhoneNumber((String) photoMap.get(j).get("phoneNumber"));
                 photo.setIdd((Integer) photoMap.get(j).get("idd"));
                 photo.setId((Integer) photoMap.get(j).get("id"));
                 photo.setAddress((String) photoMap.get(j).get("address"));

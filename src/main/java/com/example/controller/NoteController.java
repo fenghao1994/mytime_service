@@ -166,12 +166,12 @@ public class NoteController {
     }
 
     @RequestMapping(value = "/deletePhoto", method = RequestMethod.POST)
-    public String deletePhoto(@RequestParam("idd") String idd){
+    public ResponseEntity<?> deletePhoto(@RequestParam("idd") String idd){
         boolean flag = noteService.deletePhoto(idd);
         if (flag){
-            return "删除成功";
+            return new ResponseEntity<>("{\"msg\":\"删除成功\"}", HttpStatus.OK);
         }else {
-            return "删除失败";
+            return new ResponseEntity<>("{\"msg\":\"删除失败\"}", HttpStatus.BAD_REQUEST);
         }
     }
 }

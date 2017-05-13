@@ -25,7 +25,6 @@
    </div>
 
     <script>
-        var id;
         var edit = angular.module('editUser', []);
         edit.controller('editUserPassword', ['$scope', '$location', '$http', function ($scope, $location, $http) {
             var url = getParams();
@@ -44,7 +43,7 @@
                     alert("修改失败");
                 });
             }
-        }])
+        }]);
         function getParams() {
             var search = location.search;
             if (search && search.indexOf("?") == 0) {

@@ -90,12 +90,12 @@ public class PlanController {
     }
 
     @RequestMapping("/root/deletePlamFromDisk")
-    public String deleteFromDisk(@RequestParam("idd") int idd){
+    public ResponseEntity<?> deleteFromDisk(@RequestParam("idd") int idd){
         boolean flag = planService.deleteFromDisk(idd);
         if (flag){
-            return "删除成功";
+            return new ResponseEntity<>("{\"msg\":\"删除成功\"}", HttpStatus.OK);
         }else {
-            return "删除失败";
+            return new ResponseEntity<>("{\"msg\":\"删除失败\"}", HttpStatus.BAD_REQUEST);
         }
     }
 }
