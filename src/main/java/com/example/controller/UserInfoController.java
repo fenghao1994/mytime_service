@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.bean.User;
+import com.example.configurer.UserManager;
 import com.example.service.UserService;
 import org.apache.catalina.mapper.Mapper;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -130,5 +131,16 @@ public class UserInfoController {
 //            return new ResponseEntity<>("{\"msg\":\"用户不存在\"}", HttpStatus.BAD_REQUEST);
 //        }
         return user;
+    }
+
+    @RequestMapping(value = "/root/login", method = RequestMethod.POST)
+    public void rootLogin(HttpServletRequest request){
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        if (username.equals("admin") && password.equals("admin")){
+            request.getSession().setAttribute("isLogin", true);
+        }else {
+            request.getSession().setAttribute("isLogin", false);
+        }
     }
 }

@@ -47,7 +47,7 @@
 									<td>{{x.headImg}}</td>
 									<td>
 										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
-										<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>
+										<a href="/edituser.html#id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>
 										<a ng-click="deleteUser(x.id)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>
 								</tr>
@@ -89,7 +89,7 @@
 					}).then(function successCallback(response){
 						$scope.users = response.data;
 					},function errorCallback(response){
-						alert(response.data);
+						alert(response);
 						console.info(response);
 					});
 				}
@@ -103,7 +103,7 @@
 					}).then(function successCallback(response){
 						window.location.reload(true);
 					},function errorCallback(response){
-						alert(response.data);
+						alert(response);
 					});
 				}
 				$scope.getOneUser = function (phoneNumber) {

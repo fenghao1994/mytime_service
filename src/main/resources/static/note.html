@@ -53,7 +53,7 @@
 									<td>{{x.editTime}}</td>
 									<td>
 										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
-										<a href ="/photoshow.html?phoneNumber={{x.phoneNumber}}&objectId={{x.address[0].objectId}}&objectType={{x.address[0].objectType}}"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>
+										<a ng-click="showPhoto(x.phoneNumber, x.address[0].objectId, x.address[0].objectType)"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>
 										<!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
 										<a ng-click="deleteNote(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>
@@ -124,6 +124,12 @@
 						alert(response);
 					});
 				}
+				$scope.showPhoto = function (phoneNumber,objectId, objectType) {
+					parent.tab.tabAdd({
+						href: '/photoshow.html?phoneNumber=' + phoneNumber + '&objectId=' + objectId + '&objectType=' + objectType, //地址
+						title: '图片'
+					});
+				};
 			});
 		</script>
 	</body>
