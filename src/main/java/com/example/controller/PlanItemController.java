@@ -216,4 +216,12 @@ public class PlanItemController {
             return "删除失败";
         }
     }
+
+    @RequestMapping("/getPlanItemWithPlanIdAndPhoneNumber")
+    public List<PlanItem> getPlanItemWithPlanIdAndPhoneNumber(@RequestParam("phoneNumber")String phoneNumber,
+                                                              @RequestParam("planId")String planId){
+        List<PlanItem> list = new ArrayList<>();
+        list = planItemService.getPlanItemWithPlanIdAndPhoneNumber(phoneNumber, planId);
+        return list;
+    }
 }

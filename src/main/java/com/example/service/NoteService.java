@@ -28,6 +28,8 @@ import java.util.Map;
 public class NoteService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    private List<Note> allNote;
+
     //保存note
     public boolean saveNote(Note note, List<MultipartFile> files){
         boolean flag = saveFile(note, files);
@@ -87,6 +89,7 @@ public class NoteService {
         if (mapArrayList != null && mapArrayList.size() > 0){
             for (int i = 0 ; i< mapArrayList.size(); i++){
                 Note note = new Note();
+                note.setIdd((Integer) mapArrayList.get(i).get("idd"));
                 note.setId((Integer) mapArrayList.get(i).get("id"));
                 note.setTitle((String) mapArrayList.get(i).get("title"));
                 note.setContent((String) mapArrayList.get(i).get("content"));
@@ -162,6 +165,88 @@ public class NoteService {
                 }
             }
         }
+        return true;
+    }
+
+    public List<Note> getAllNote() {
+        ArrayList<Note> list = new ArrayList<>();
+        String sql = "SELECT * FROM note";
+        List<Map<String, Object>> mapArrayList = new ArrayList<>();
+        mapArrayList = jdbcTemplate.queryForList(sql);
+        if (mapArrayList != null && mapArrayList.size() > 0){
+            for (int i = 0 ; i< mapArrayList.size(); i++){
+                Note note = new Note();
+                note.setIdd((Integer) mapArrayList.get(i).get("idd"));
+                note.setId((Integer) mapArrayList.get(i).get("id"));
+                note.setTitle((String) mapArrayList.get(i).get("title"));
+                note.setContent((String) mapArrayList.get(i).get("content"));
+                note.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
+                note.setEditTime((Long) mapArrayList.get(i).get("editTime"));
+                note.setPhoneNumber((String) mapArrayList.get(i).get("phoneNumber"));
+                byte[] b1 = (byte[]) mapArrayList.get(i).get("isEdit");
+                if (b1[0] == 0){
+                    note.setEdit(false);
+                }else {
+                    note.setEdit(true);
+                }
+                byte[] b2 = (byte[]) mapArrayList.get(i).get("isDelete");
+                if (b2[0] == 0){
+                    note.setDelete(false);
+                }else {
+                    note.setDelete(true);
+                }
+                list.add(note);
+            }
+        }
+        for (int i = 0; i< list.size() ;i++){
+            ArrayList<Photo> photos = new ArrayList<>();
+            String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND objectId = ? AND objectType = ?";
+            List<Map<String, Object>> photoMap = new ArrayList<>();
+            photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getId(), "2"});
+            if (photoMap != null && photoMap.size() > 0){
+                for (int j = 0 ; j < photoMap.size(); j++){
+                    Photo photo = new Photo();
+                    photo.setId((Integer) photoMap.get(j).get("id"));
+                    photo.setAddress((String) photoMap.get(j).get("address"));
+                    photo.setObjectId((Integer) photoMap.get(j).get("objectId"));
+                    photo.setObjectType((Integer) photoMap.get(j).get("objectType"));
+                    photos.add(photo);
+                }
+            }
+            list.get(i).setAddress( photos);
+        }
+        return list;
+    }
+
+    //物理删除
+    public boolean deleteFromDisk(int idd) {
+        String sql = "DELETE FROM note WHERE idd = ?";
+        jdbcTemplate.update(sql, new Object[]{idd});
+        return true;
+    }
+
+    public List<Photo> getPhotos(String phoneNumber, String objectId, String objectType) {
+        ArrayList<Photo> photos = new ArrayList<>();
+        String sql = "SELECT * FROM photo WHERE phoneNumber = ? AND objectId = ? AND objectType = ?";
+        List<Map<String, Object>> photoMap = new ArrayList<>();
+        photoMap = jdbcTemplate.queryForList(sql, new Object[]{phoneNumber, objectId, objectType});
+        if (photoMap != null && photoMap.size() > 0){
+            for (int j = 0 ; j < photoMap.size(); j++){
+                Photo photo = new Photo();
+                photo.setIdd((Integer) photoMap.get(j).get("idd"));
+                photo.setId((Integer) photoMap.get(j).get("id"));
+                photo.setAddress((String) photoMap.get(j).get("address"));
+                photo.setObjectId((Integer) photoMap.get(j).get("objectId"));
+                photo.setObjectType((Integer) photoMap.get(j).get("objectType"));
+                photos.add(photo);
+            }
+        }
+        return photos;
+    }
+
+    public boolean deletePhoto(String idd) {
+        String sql = "DELETE FROM photo WHERE idd = ?";
+        jdbcTemplate.update(sql, new Object[]{idd});
         return true;
     }
 }

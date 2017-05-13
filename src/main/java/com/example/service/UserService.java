@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +24,7 @@ public class UserService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
 
     //注册
     public boolean register(User user){
@@ -112,5 +115,46 @@ public class UserService {
         Map<String, Object> map = jdbcTemplate.queryForMap(sql, new Object[]{phoneNumber});
         String path = (String) map.get("headImg");
         return path;
+    }
+
+    public List<User> getAllUser() {
+        ArrayList<User> allUser = new ArrayList<>();
+        String sql = "SELECT * FROM user";
+        List<Map<String, Object>> mapArrayList = new ArrayList<>();
+        mapArrayList = jdbcTemplate.queryForList(sql);
+        if (mapArrayList != null && mapArrayList.size() > 0){
+            for (int i = 0 ; i< mapArrayList.size(); i++) {
+                User user = new User();
+                user.setId((Integer) mapArrayList.get(i).get("id"));
+                user.setPhoneNumber((String) mapArrayList.get(i).get("phoneNumber"));
+                user.setHeadImg((String) mapArrayList.get(i).get("headImg"));
+                allUser.add(user);
+            }
+        }
+        return allUser;
+    }
+
+    public boolean deleteUser(int id) {
+        String sql = "DELETE FROM user WHERE id = ?";
+        jdbcTemplate.update(sql, new Object[]{id});
+        return true;
+    }
+
+    public boolean resetPasswordFromRoot(int id, String password) {
+        String sql2 = "UPDATE user SET password = ? WHERE id = ?";
+        jdbcTemplate.update(sql2, new Object[]{password, id});
+        return true;
+    }
+
+    public User rootGetUser(String phoneNumber) {
+        String sql = "SELECT * FROM user WHERE phoneNumber = ?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        User user;
+        try{
+            user = jdbcTemplate.queryForObject(sql, rowMapper, new Object[]{phoneNumber});
+        }catch (Exception e){
+            user = null;
+        }
+        return user;
     }
 }

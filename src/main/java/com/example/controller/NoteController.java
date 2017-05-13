@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -133,6 +130,43 @@ public class NoteController {
     @ResponseBody
     public String deleteNote(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id){
         boolean flag = noteService.deleteNote(phoneNumber, id);
+        if (flag){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
+    }
+
+    @RequestMapping(value = "/getAllNote", method = RequestMethod.POST)
+    public ResponseEntity<List<Note>> getAllNote(){
+        List<Note> list = noteService.getAllNote();
+        return new ResponseEntity<List<Note>>(list, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/root/deleteNoteFromDisk", method = RequestMethod.POST)
+    public String deleteFromDisk(@RequestParam("idd") int idd){
+        boolean flag = noteService.deleteFromDisk(idd);
+        if (flag){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
+    }
+
+    @RequestMapping(value = "/getPhotos", method = RequestMethod.POST)
+    public ResponseEntity<?> getPhotos(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("objectId") String objectId,
+    @RequestParam("objectType")String objectType){
+        List<Photo> list = noteService.getPhotos(phoneNumber, objectId, objectType);
+        if (list != null && list.size() > 0){
+            return new ResponseEntity<>("{\"msg\":" + list + "}", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("{\"msg\":\"没有存储照片\"}", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "deletePhoto", method = RequestMethod.POST)
+    public String deletePhoto(@RequestParam("idd") String idd){
+        boolean flag = noteService.deletePhoto(idd);
         if (flag){
             return "删除成功";
         }else {

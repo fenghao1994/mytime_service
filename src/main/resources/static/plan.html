@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Paging</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+
+		<link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/global.css" media="all">
+		<link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+		<script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+	</head>
+
+	<body>
+		<div style="margin: 15px;">
+			
+			<fieldset class="layui-elem-field">
+				<legend>PLAN</legend>
+				<div class="layui-field-box" ng-app="allPlan" ng-controller="getAllPlan" ng-init="load()">
+					<div>
+						<form >
+							<input type="text" ng-model="phoneNumber"/>
+							<button type="button" id="search" ng-click="getPlanWithPhoneNumber(phoneNumber)">搜索</button>
+						</form>
+						<table class="site-table table-hover">
+							<thead>
+								<tr>
+									<!-- <th><input type="checkbox" id="selected-all"></th> -->
+									<th>ID</th>
+									<th>所属账号</th>
+									<th>计划主题</th>
+									<th>创建时间</th>
+									<th>最后修改时间</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<!--内容容器-->
+							<tbody id="con" >
+								<tr ng-repeat = "x in plans">
+									<!-- <td><input type="checkbox"></td> -->
+									<td>{{x.idd}}</td>
+									<td>{{x.phoneNumber}}</td>
+									<td>{{x.title}}</td>
+									<td>{{x.createTime}}</td>
+									<td>{{x.editTime}}</td>
+									<td>
+										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
+										<a href =""  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">详情</a>
+										<!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
+										<a ng-click="deletePlan(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<!--分页容器-->
+						<div id="paged"></div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<!--模板-->
+		<script type="text/html" id="conTemp">
+			{{# layui.each(d.list, function(index, item){ }}
+			<tr>
+				<!--<td><input type="checkbox"></td>-->
+				<td>{{ item.name }}</td>
+				<td>{{ item.age }}</td>
+				<td>{{ item.createtime }}</td>
+				<td>
+					<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
+				<!--	<a href="/manage/article_edit_1" class="layui-btn layui-btn-mini">编辑</a>-->
+					<a href="javascript:;" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+			</tr>
+			{{# }); }}
+		</script>
+		<script type="text/javascript" src="plugins/layui/layui.js"></script>
+		<script>
+			var app = angular.module('allPlan', []);
+			app.controller('getAllPlan', function($scope, $http){
+				$scope.load = function() {
+					$http({
+						method: 'POST',
+						url:'plan/root/getAllPlan'
+					}).then(function successCallback(response){
+						console.info(response);
+						$scope.plans = response.data;
+					},function errorCallback(response){
+						alert(response);
+						console.info(response);
+					});
+				}
+				$scope.deletePlan = function (idd) {
+					alert(idd);
+					$http({
+						method: 'POST',
+						url:'plan/root/deletePlamFromDisk',
+						data: {
+							idd: idd
+						}
+					}).then(function successCallback(response){
+						window.location.reload(true);
+					},function errorCallback(response){
+						alert(response);
+					});
+				}
+				$scope.getPlanWithPhoneNumber = function (phoneNumber) {
+					alert(phoneNumber);
+					$http({
+						method: 'POST',
+						url:'plan/getPlan',
+						data: {
+							phoneNumber: phoneNumber
+						}
+					}).then(function successCallback(response){
+						console.info(response);
+						$scope.plans = response.data;
+					},function errorCallback(response){
+						alert(response);
+					});
+				}
+			});
+		</script>
+	</body>
+
+</html>

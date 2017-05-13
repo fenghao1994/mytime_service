@@ -81,4 +81,21 @@ public class PlanController {
         ArrayList<Plan> list = (ArrayList<Plan>) planService.getPlan(phoneNumber);
         return new ResponseEntity<List<Plan>>(list, HttpStatus.OK);
     }
+
+    @RequestMapping("/root/getAllPlan")
+    public List<Plan> getAllPlan(){
+        List<Plan> list = new ArrayList<>();
+        list = planService.getAllPlan();
+        return list;
+    }
+
+    @RequestMapping("/root/deletePlamFromDisk")
+    public String deleteFromDisk(@RequestParam("idd") int idd){
+        boolean flag = planService.deleteFromDisk(idd);
+        if (flag){
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
+    }
 }
