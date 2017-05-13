@@ -40,7 +40,7 @@
                         <td>{{x.idd}}</td>
                         <td>{{x.phoneNumber}}</td>
                         <td>{{x.address}}</td>
-                        <td><img src="{{x.address}}" width="40px" height="40px"></td>
+                        <td><img ng-src="{{changeStr(x.address)}}" width="40px" height="40px"></td>
                         <td>
                             <!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
                          <!--   <a href =""  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>-->
@@ -57,22 +57,22 @@
 
     <script>
         var app = angular.module('photo', []);
-        var phoneNumber, objectId, objectType;
+
         app.controller('getPhoto', function($scope, $http) {
-            $scope.load = function (phoneNumber, objectId, objectType) {
+            var url = getParams();
+            $scope.phoneNumber = url.phoneNumber;
+            $scope.objectId = url.objectId;
+            $scope.objectType = url.objectType;
+            $scope.load = function () {
                 $http({
                     method: 'POST',
                     url: 'note/getPhotos',
-                    data:{
-                        phoneNumber: phoneNumber,
-                        objectId: objectId,
-                        objectType, objectType
-                    }
+                    data: "phoneNumber=" + $scope.phoneNumber + "&objectId=" + $scope.objectId + "&objectType=" + $scope.objectType,
+                    headers:{"Content-Type": "application/x-www-form-urlencoded"}
                 }).then(function successCallback(response) {
-                    console.info(response);
-                    $scope.photos = response.data.msg;
+                    console.info(response.data);
+                    $scope.photos = response.data;
                 }, function errorCallback(response) {
-                    alert(response.data.msg);
                     console.info(response);
                 });
             }
@@ -80,16 +80,34 @@
                 $http({
                     method: 'POST',
                     url: 'note/deletePhoto',
-                    data:{
-                        idd: idd
-                    }
+                    data: "idd=" + idd,
+                    headers:{"Content-Type": "application/x-www-form-urlencoded"}
                 }).then(function successCallback(response) {
-                    alert(response.data);
+                    alert("删除成功");
                 }, function errorCallback(response) {
-                    alert(response);
+                    alert("删除失败");
                 })
             }
+            $scope.changeStr = function(param) {
+                var param = param.substring(8);
+                return '/pics/' + param;
+            };
         });
+
+        function getParams() {
+            var search = location.search;
+            if (search && search.indexOf("?") == 0) {
+                search = search.substring(1);
+                var temp = search.split("&");
+                var object = {};
+                for (var i = 0, length = temp.length; i < length; i++) {
+                    var item = temp[i];
+                    var indexOfEqual = item.indexOf("=");
+                    object[item.substring(0, indexOfEqual)] = item.substring(indexOfEqual + 1);
+                }
+                return object;
+            } else { return {}; }
+        }
     </script>
 </body>
 </html>

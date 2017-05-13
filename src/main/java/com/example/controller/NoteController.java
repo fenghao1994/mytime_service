@@ -144,27 +144,28 @@ public class NoteController {
     }
 
     @RequestMapping(value = "/root/deleteNoteFromDisk", method = RequestMethod.POST)
-    public String deleteFromDisk(@RequestParam("idd") int idd){
+    public ResponseEntity<?> deleteFromDisk(@RequestParam("idd") int idd){
         boolean flag = noteService.deleteFromDisk(idd);
         if (flag){
-            return "删除成功";
+            return new ResponseEntity<>("{\"msg\":\"删除成功\"}", HttpStatus.OK);
         }else {
-            return "删除失败";
+            return new ResponseEntity<>("{\"msg\":\"删除失败\"}", HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = "/getPhotos", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseEntity<?> getPhotos(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("objectId") String objectId,
     @RequestParam("objectType")String objectType){
         List<Photo> list = noteService.getPhotos(phoneNumber, objectId, objectType);
         if (list != null && list.size() > 0){
-            return new ResponseEntity<>("{\"msg\":" + list + "}", HttpStatus.OK);
+            return new ResponseEntity<>(list, HttpStatus.OK);
         }else {
             return new ResponseEntity<>("{\"msg\":\"没有存储照片\"}", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(value = "deletePhoto", method = RequestMethod.POST)
+    @RequestMapping(value = "/deletePhoto", method = RequestMethod.POST)
     public String deletePhoto(@RequestParam("idd") String idd){
         boolean flag = noteService.deletePhoto(idd);
         if (flag){
