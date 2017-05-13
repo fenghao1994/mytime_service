@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.bean.User;
+import com.example.configurer.Permission;
 import com.example.configurer.UserManager;
 import com.example.service.UserService;
 import org.apache.catalina.mapper.Mapper;
@@ -25,6 +26,9 @@ public class UserInfoController {
     private final ResourceLoader resourceLoader;
 
     @Autowired
+    private HttpServletRequest request;
+
+    @Autowired
     private UserService userService;
 
     private static final String ROOT = "pics";
@@ -35,7 +39,7 @@ public class UserInfoController {
         this.resourceLoader = resourceLoader;
     }
 
-    //登陆
+    //客户端登陆
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<String> login(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
         User user = new User();
@@ -133,14 +137,18 @@ public class UserInfoController {
         return user;
     }
 
+
+    //管理员
     @RequestMapping(value = "/root/login", method = RequestMethod.POST)
-    public void rootLogin(HttpServletRequest request){
+    public ResponseEntity<?> rootLogin(){
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         if (username.equals("admin") && password.equals("admin")){
             request.getSession().setAttribute("isLogin", true);
+            return new ResponseEntity<Object>(HttpStatus.OK);
         }else {
             request.getSession().setAttribute("isLogin", false);
+            return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
         }
     }
 }

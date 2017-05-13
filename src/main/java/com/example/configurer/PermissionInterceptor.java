@@ -3,11 +3,15 @@ package com.example.configurer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.controller.UserInfoController;
+import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.lang.reflect.Method;
 
 
 public class PermissionInterceptor implements HandlerInterceptor {
@@ -25,8 +29,19 @@ public class PermissionInterceptor implements HandlerInterceptor {
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 //			Object bean = handlerMethod.getBean();
-//			Method method = handlerMethod.getMethod();
-			Permission permissionAnnotation = handlerMethod.getMethodAnnotation(Permission.class);
+			Method method = handlerMethod.getMethod();
+			if (method.equals(UserInfoController.class.getMethod("rootLogin")))
+				return true;
+			Object isLogin = request.getSession().getAttribute("isLogin");
+			if (isLogin != null){
+				if ((boolean)isLogin){
+					return true;
+				}
+			}
+			response.sendRedirect("login.html");
+			return false;
+
+			/*Permission permissionAnnotation = handlerMethod.getMethodAnnotation(Permission.class);
 			if (permissionAnnotation != null) {
 				int[] value = permissionAnnotation.value();
 				if (value.length == 0) {
@@ -41,7 +56,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 				} else {
 					// TODO 多角色用户权限
 				}
-			}
+			}*/
 		}
 		return true;
 	}
