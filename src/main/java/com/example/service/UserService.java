@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.bean.FeedBack;
 import com.example.bean.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -156,5 +157,70 @@ public class UserService {
             user = null;
         }
         return user;
+    }
+
+    /**
+     * 用户提交建议
+     * @param phoneNumber
+     * @param createTime
+     * @param feedback
+     */
+    public void feedBack(String phoneNumber, long createTime, String feedback){
+        String sql = "INSERT INTO feedback (phoneNumber, createTime, feedback) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, new Object[]{phoneNumber, createTime, feedback});
+    }
+
+    public List<FeedBack> getAllFeedBack(){
+        ArrayList<FeedBack> arrayList = new ArrayList<>();
+        String sql = "SELECT * FROM feedback";
+        List<Map<String, Object>> mapArrayList = new ArrayList<>();
+        mapArrayList = jdbcTemplate.queryForList(sql);
+        if (mapArrayList != null && mapArrayList.size() > 0) {
+            for (int i = 0; i < mapArrayList.size(); i++) {
+                FeedBack feedBack = new FeedBack();
+                feedBack.setId((Integer) mapArrayList.get(i).get("id"));
+                feedBack.setPhoneNumber((String) mapArrayList.get(i).get("phoneNumber"));
+                feedBack.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
+                feedBack.setFeedBack((String) mapArrayList.get(i).get("feedback"));
+                arrayList.add(feedBack);
+            }
+        }
+        return arrayList;
+    }
+
+
+    /**
+     * 删除反馈
+     * @param id
+     * @return
+     */
+    public boolean deleteFeedBack(int id) {
+        String sql = "DELETE FROM feedback WHERE id = ?";
+        jdbcTemplate.update(sql, new Object[]{id});
+        return true;
+    }
+
+
+    /**
+     * 通过手机号获取用户反馈
+     * @param phoneNumber
+     * @return
+     */
+    public List<FeedBack> getFeedBackWithPhoneNumber(String phoneNumber) {
+        ArrayList<FeedBack> arrayList = new ArrayList<>();
+        String sql = "SELECT * FROM feedback WHERE phoneNumber = ?";
+        List<Map<String, Object>> mapArrayList = new ArrayList<>();
+        mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{phoneNumber});
+        if (mapArrayList != null && mapArrayList.size() > 0) {
+            for (int i = 0; i < mapArrayList.size(); i++) {
+                FeedBack feedBack = new FeedBack();
+                feedBack.setId((Integer) mapArrayList.get(i).get("id"));
+                feedBack.setPhoneNumber((String) mapArrayList.get(i).get("phoneNumber"));
+                feedBack.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
+                feedBack.setFeedBack((String) mapArrayList.get(i).get("feedback"));
+                arrayList.add(feedBack);
+            }
+        }
+        return arrayList;
     }
 }

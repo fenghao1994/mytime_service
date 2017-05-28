@@ -1,13 +1,18 @@
 var navs = [{
-	"title": "USER",
+	"title": "用户",
 	"href": "user.html",
 	"spread": true,
 }, {
-	"title": "PLAN",
+	"title": "主题",
 	"href": "plan.html",
 	"spread": false,
 }, {
-	"title": "NOTE",
+	"title": "便签",
 	"href": "note.html",
 	"spread": false,
-}];
+}, {
+	"title": "反馈",
+	"href": "feedback.html",
+	"spread": false
+}
+];
