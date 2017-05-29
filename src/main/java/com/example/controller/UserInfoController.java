@@ -104,7 +104,6 @@ public class UserInfoController {
     @RequestMapping(value = "/getAllUser", method = RequestMethod.POST)
     public ResponseEntity<List<User>> getAllUser() {
         ArrayList<User> list = (ArrayList<User>) userService.getAllUser();
-        Mapper mapper = new Mapper();
         return new ResponseEntity<List<User>>(list, HttpStatus.OK);
     }
 
@@ -129,14 +128,15 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/root/getUser", method = RequestMethod.POST)
-    public User rootGetUser(@RequestParam("phoneNumber") String phoneNumber) {
+    public  ResponseEntity<List<User>> rootGetUser(@RequestParam("phoneNumber") String phoneNumber) {
+        if (phoneNumber.equals("undefined") || phoneNumber.equals("")) {
+            return getAllUser();
+        }
+
         User user = userService.rootGetUser(phoneNumber);
-//        if (user != null) {
-//            return new ResponseEntity<>("{\"msg\":" + user + "}", HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>("{\"msg\":\"用户不存在\"}", HttpStatus.BAD_REQUEST);
-//        }
-        return user;
+        List<User> list = new ArrayList<>();
+        list.add(user);
+        return new ResponseEntity<List<User>>(list, HttpStatus.OK);
     }
 
 
