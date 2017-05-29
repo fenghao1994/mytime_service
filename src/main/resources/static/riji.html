@@ -21,34 +21,36 @@
 		<div style="margin: 15px;">
 			
 			<fieldset class="layui-elem-field">
-				<legend>USER</legend>
-				<div class="layui-field-box" ng-app="allUser" ng-controller="getAllUser" ng-init="load()">
+				<legend>RIJI</legend>
+				<div class="layui-field-box" ng-app="allRiji" ng-controller="getAllRiji" ng-init="load()">
 					<div>
 						<form >
 							<input type="text" ng-model="phoneNumber"/>
-							<button type="button" id="search" ng-click="getOneUser(phoneNumber)">搜索</button>
+							<button type="button" id="search" ng-click="getRijisWithPhoneNumber(phoneNumber)">搜索</button>
 						</form>
 						<table class="site-table table-hover">
 							<thead>
 								<tr>
 									<!-- <th><input type="checkbox" id="selected-all"></th> -->
-									<th>用户ID</th>
-									<th>电话</th>
-									<th>头像地址</th>
+									<th>ID</th>
+									<th>所属账号</th>
+									<th>日记内容</th>
+									<th>当日天气</th>
+									<th>创建时间</th>
 									<th>操作</th>
 								</tr>
 							</thead>
 							<!--内容容器-->
 							<tbody id="con" >
-								<tr ng-repeat = "x in users">
+								<tr ng-repeat = "x in riji">
 									<!-- <td><input type="checkbox"></td> -->
-									<td>{{x.id}}</td>
+									<td>{{x.idd}}</td>
 									<td>{{x.phoneNumber}}</td>
-									<td>{{x.headImg}}</td>
+									<td>{{x.content}}</td>
+									<td>{{x.weather}}</td>
+									<td>{{x.createTime}}</td>
 									<td>
-										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
-										<a href="/edituser.html#id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>
-										<a ng-click="deleteUser(x.id)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+										<a ng-click="deleteNote(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>
 								</tr>
 							</tbody>
@@ -77,46 +79,44 @@
 		</script>
 		<script type="text/javascript" src="plugins/layui/layui.js"></script>
 		<script>
-			var app = angular.module('allUser', []);
-			app.config(function ($httpProvider) {
-				$httpProvider.defaults.headers.common = { 'Content-Type' : 'application/x-www-form-urlencoded' }
-			});
-			app.controller('getAllUser', function($scope, $http){
+			var app = angular.module('allRiji', []);
+			app.controller('getAllRiji', function($scope, $http){
 				$scope.load = function() {
 					$http({
 						method: 'POST',
-						url:'user/getAllUser'
+						url:'riji/root/getAllRiji'
 					}).then(function successCallback(response){
-						$scope.users = response.data;
+						console.info(response.data);
+						$scope.riji = response.data;
 					},function errorCallback(response){
 						alert(response);
 						console.info(response);
 					});
 				}
-				$scope.deleteUser = function (id) {
-					alert(id);
+				$scope.deleteNote = function (idd) {
 					$http({
 						method: 'POST',
-						url:'user/deleteUser',
-						data: "id=" + id,
+						url:'riji/root/deleteRijiFromDisk',
+						data: "idd=" + idd,
 						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){
 						window.location.reload(true);
+						alert("删除成功");
 					},function errorCallback(response){
-						alert(response);
+						alert("删除失败");
 					});
 				}
-				$scope.getOneUser = function (phoneNumber) {
+				$scope.getRijisWithPhoneNumber = function (phoneNumber) {
 					$http({
 						method: 'POST',
-						url:'user/root/getUser',
-						data:"phoneNumber=" + phoneNumber,
+						url:'riji/getAllRiji',
+						data: "phoneNumber=" + phoneNumber,
 						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){
-						console.info(response.data);
-						$scope.users = response.data;
+						console.info(response);
+						$scope.riji = response.data;
 					},function errorCallback(response){
-						alert(response.data);
+						alert(response);
 					});
 				}
 			});

@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.bean.Plan;
 import com.example.service.PlanService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,7 +79,15 @@ public class PlanController {
     //获取plan
     @RequestMapping("/getPlan")
     public ResponseEntity<List<Plan>> getPlan(@RequestParam("phoneNumber") String phoneNumber){
-        ArrayList<Plan> list = (ArrayList<Plan>) planService.getPlan(phoneNumber);
+        ArrayList<Plan> list = new ArrayList<>();
+        if (phoneNumber.equals("undefined") || phoneNumber.equals("")) {
+            list.clear();
+            list.addAll(getAllPlan());
+            return new ResponseEntity<List<Plan>>(list, HttpStatus.OK);
+        }
+
+        list.clear();
+        list.addAll((ArrayList<Plan>) planService.getPlan(phoneNumber));
         return new ResponseEntity<List<Plan>>(list, HttpStatus.OK);
     }
 

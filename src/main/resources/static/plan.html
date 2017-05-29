@@ -92,7 +92,6 @@
 						console.info(response);
 						$scope.plans = response.data;
 					},function errorCallback(response){
-						alert(response);
 						console.info(response);
 					});
 				}
@@ -105,11 +104,10 @@
 					}).then(function successCallback(response){
 						window.location.reload(true);
 					},function errorCallback(response){
-						alert(response);
+						console.info(response);
 					});
 				}
 				$scope.getPlanWithPhoneNumber = function (phoneNumber) {
-					alert(phoneNumber);
 					$http({
 						method: 'POST',
 						url:'plan/getPlan',
@@ -119,7 +117,7 @@
 						console.info(response);
 						$scope.plans = response.data;
 					},function errorCallback(response){
-						alert(response);
+						console.info(response);
 					});
 				}
 				$scope.showPlanItem = function (planId,phoneNumber) {

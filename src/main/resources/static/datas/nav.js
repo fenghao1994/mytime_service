@@ -14,5 +14,9 @@ var navs = [{
 	"title": "反馈",
 	"href": "feedback.html",
 	"spread": false
+}, {
+	"title": "日记",
+	"href": "riji.html",
+	"spread": false
 }
 ];

@@ -122,6 +122,9 @@ public class NoteController {
     //获取note
     @RequestMapping("/getNote")
     public ResponseEntity<List<Note>> getNote(@RequestParam("phoneNumber") String phoneNumber){
+        if (phoneNumber.equals("undefined") || phoneNumber.equals("")) {
+            return getAllNote();
+        }
         List<Note> list = noteService.getNote(phoneNumber);
         return new ResponseEntity<List<Note>>(list, HttpStatus.OK);
     }
