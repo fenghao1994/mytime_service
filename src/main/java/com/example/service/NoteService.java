@@ -46,9 +46,9 @@ public class NoteService {
             return true;
         }
         for (int i = 0 ; i < note.getAddress().size(); i++){
-            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber) VALUES(? ,? ,? ,?, ?)";
+            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber, createTime) VALUES(? ,? ,? ,?, ?, ?)";
             jdbcTemplate.update(sql1, new Object[]{note.getAddress().get(i).getId(), note.getAddress().get(i).getObjectType(),
-                    note.getAddress().get(i).getObjectId(), note.getAddress().get(i).getAddress(), note.getPhoneNumber()});
+                    note.getAddress().get(i).getObjectId(), note.getAddress().get(i).getAddress(), note.getPhoneNumber(), note.getCreateTime()});
         }
         return true;
 
@@ -60,21 +60,21 @@ public class NoteService {
             return flag;
         }
         String sql = "UPDATE note SET title = ?, content = ?, editTime = ?, isEdit = ?," +
-                " isDelete = ? WHERE phoneNumber = ? AND id = ?" ;
+                " isDelete = ? WHERE phoneNumber = ? AND createTime = ?" ;
         jdbcTemplate.update(sql, new Object[]{note.getTitle(), note.getContent(),
-                note.getEditTime(), note.isEdit(), note.isDelete(), note.getPhoneNumber(), note.getId()});
+                note.getEditTime(), note.isEdit(), note.isDelete(), note.getPhoneNumber(), note.getCreateTime()});
 
         String sqlDelete = "DELETE FROM photo WHERE phoneNumber = ? AND objectType = ? AND " +
-                "objectId = ?";
-        jdbcTemplate.update(sqlDelete, new Object[]{note.getPhoneNumber(), "2", note.getId()});
+                "createTime = ?";
+        jdbcTemplate.update(sqlDelete, new Object[]{note.getPhoneNumber(), "2", note.getCreateTime()});
 
         if (note.getAddress() == null){
             return true;
         }
         for (int i = 0 ; i < note.getAddress().size(); i++){
-            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber) VALUES(? ,? ,? ,?, ?)";
+            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber, createTime) VALUES(? ,? ,? ,?, ?, ?)";
             jdbcTemplate.update(sql1, new Object[]{note.getAddress().get(i).getId(), note.getAddress().get(i).getObjectType(),
-                    note.getAddress().get(i).getObjectId(), note.getAddress().get(i).getAddress(), note.getPhoneNumber()});
+                    note.getAddress().get(i).getObjectId(), note.getAddress().get(i).getAddress(), note.getPhoneNumber(), note.getCreateTime()});
         }
         return true;
     }
@@ -113,9 +113,9 @@ public class NoteService {
         }
         for (int i = 0; i< list.size() ;i++){
             ArrayList<Photo> photos = new ArrayList<>();
-            String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND objectId = ? AND objectType = ?";
+            String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND createTime = ? AND objectType = ?";
             List<Map<String, Object>> photoMap = new ArrayList<>();
-            photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getId(), "2"});
+            photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getCreateTime(), "2"});
             if (photoMap != null && photoMap.size() > 0){
                 for (int j = 0 ; j < photoMap.size(); j++){
                     Photo photo = new Photo();
@@ -123,6 +123,7 @@ public class NoteService {
                     photo.setAddress((String) photoMap.get(j).get("address"));
                     photo.setObjectId((Integer) photoMap.get(j).get("objectId"));
                     photo.setObjectType((Integer) photoMap.get(j).get("objectType"));
+                    photo.setCreateTime((Long) photoMap.get(j).get("createTime"));
                     photos.add(photo);
                 }
             }
@@ -210,6 +211,7 @@ public class NoteService {
                     photo.setAddress((String) photoMap.get(j).get("address"));
                     photo.setObjectId((Integer) photoMap.get(j).get("objectId"));
                     photo.setObjectType((Integer) photoMap.get(j).get("objectType"));
+                    photo.setCreateTime((Long) photoMap.get(j).get("createTime"));
                     photos.add(photo);
                 }
             }
@@ -239,6 +241,7 @@ public class NoteService {
                 photo.setAddress((String) photoMap.get(j).get("address"));
                 photo.setObjectId((Integer) photoMap.get(j).get("objectId"));
                 photo.setObjectType((Integer) photoMap.get(j).get("objectType"));
+                photo.setCreateTime((Long) photoMap.get(j).get("createTime"));
                 photos.add(photo);
             }
         }

@@ -46,9 +46,9 @@ public class PlanItemService {
             return true;
         }
         for (int i = 0 ; i < planItem.getAddress().size(); i++){
-            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber) VALUES(? ,? ,? ,?, ?)";
+            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber, createTime) VALUES(? ,? ,? ,?, ?, ?)";
             jdbcTemplate.update(sql1, new Object[]{planItem.getAddress().get(i).getId(), planItem.getAddress().get(i).getObjectType(),
-                    planItem.getAddress().get(i).getObjectId(), planItem.getAddress().get(i).getAddress(), planItem.getPhoneNumber()});
+                    planItem.getAddress().get(i).getObjectId(), planItem.getAddress().get(i).getAddress(), planItem.getPhoneNumber(), planItem.getCreateTime()});
         }
         return true;
     }
@@ -63,25 +63,25 @@ public class PlanItemService {
         String sql = "UPDATE planitem SET title = ?, content = ?, editTime = ?," +
                 "isEdit = ?, messageContent = ?, messagePhoneNumber = ?, location = ?, phoneNumberLianXi = ?, " +
                 "isEveryDay = ?, isManyDays = ?, isExpired = ?, isComplete = ?, isDelete = ?, years = ?, months = ?," +
-                "days = ?, hours = ?, minutes = ?, alarmWay = ?, describes = ? WHERE phoneNumber = ? AND id = ? ";
+                "days = ?, hours = ?, minutes = ?, alarmWay = ?, describes = ? WHERE phoneNumber = ? AND createTime = ? ";
         int num = jdbcTemplate.update(sql, new Object[]{planItem.getTitle(),
                 planItem.getContent(), planItem.getEditTime(), planItem.isEdit(),
                 planItem.getMessageContent(), planItem.getMessagePhoneNumber(), planItem.getLocation(),
                 planItem.getPhoneNumberLianXi(), planItem.isEveryDay(), planItem.isManyDays(), planItem.isExpired(), planItem.isComplete(),
                 planItem.isDelete(),planItem.getYears(), planItem.getMonths(), planItem.getDays(), planItem.getHours(), planItem.getMinutes(),
-                planItem.getAlarmWay(), planItem.getDescribes(), planItem.getPhoneNumber(), planItem.getId()});
+                planItem.getAlarmWay(), planItem.getDescribes(), planItem.getPhoneNumber(), planItem.getCreateTime()});
 
         String sqlDelete = "DELETE FROM photo WHERE phoneNumber = ? AND objectType = ? AND " +
-                "objectId = ?";
-        jdbcTemplate.update(sqlDelete, new Object[]{planItem.getPhoneNumber(), "1", planItem.getId()});
+                "createTime = ?";
+        jdbcTemplate.update(sqlDelete, new Object[]{planItem.getPhoneNumber(), "1", planItem.getCreateTime()});
 
         if (planItem.getAddress() == null){
             return true;
         }
         for (int i = 0 ; i < planItem.getAddress().size(); i++){
-            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber) VALUES(? ,? ,? ,?, ?)";
+            String sql1 = "INSERT INTO photo(id, objectType, objectId, address, phoneNumber, createTime) VALUES(? ,? ,? ,?, ?, ?)";
             jdbcTemplate.update(sql1, new Object[]{planItem.getAddress().get(i).getId(), planItem.getAddress().get(i).getObjectType(),
-                    planItem.getAddress().get(i).getObjectId(), planItem.getAddress().get(i).getAddress(), planItem.getPhoneNumber()});
+                    planItem.getAddress().get(i).getObjectId(), planItem.getAddress().get(i).getAddress(), planItem.getPhoneNumber(), planItem.getCreateTime()});
         }
         return true;
     }
@@ -159,9 +159,9 @@ public class PlanItemService {
 
         for (int i = 0; i< list.size() ;i++){
             ArrayList<Photo> photos = new ArrayList<>();
-            String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND objectId = ? AND objectType = ?";
+            String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND createTime = ? AND objectType = ?";
             List<Map<String, Object>> photoMap = new ArrayList<>();
-            photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getId(), "1"});
+            photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getCreateTime(), "1"});
             if (photoMap != null && photoMap.size() > 0){
                 for (int j = 0 ; j < photoMap.size(); j++){
                     Photo photo = new Photo();
@@ -169,6 +169,7 @@ public class PlanItemService {
                     photo.setAddress((String) photoMap.get(j).get("address"));
                     photo.setObjectId((Integer) photoMap.get(j).get("objectId"));
                     photo.setObjectType((Integer) photoMap.get(j).get("objectType"));
+                    photo.setCreateTime((Long) photoMap.get(j).get("createTime"));
                     photos.add(photo);
                 }
             }
@@ -214,9 +215,9 @@ public class PlanItemService {
         return true;
     }
 
-    public boolean completePlanItem(String phoneNumber, String id, String editTime) {
-        String sql = "UPDATE planitem SET isComplete = 1, editTime = ?  WHERE phoneNumber = ? AND id = ?";
-        jdbcTemplate.update(sql, new Object[]{editTime, phoneNumber, id});
+    public boolean completePlanItem(String phoneNumber, String createTime, String editTime) {
+        String sql = "UPDATE planitem SET isComplete = 1, editTime = ?  WHERE phoneNumber = ? AND createTime = ?";
+        jdbcTemplate.update(sql, new Object[]{editTime, phoneNumber, createTime});
         return true;
     }
 
@@ -303,6 +304,7 @@ public class PlanItemService {
                     photo.setAddress((String) photoMap.get(j).get("address"));
                     photo.setObjectId((Integer) photoMap.get(j).get("objectId"));
                     photo.setObjectType((Integer) photoMap.get(j).get("objectType"));
+                    photo.setCreateTime((Long) photoMap.get(j).get("createTime"));
                     photos.add(photo);
                 }
             }

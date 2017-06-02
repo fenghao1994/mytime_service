@@ -14,6 +14,15 @@ public class Photo implements Serializable{
     int objectId;
     String address;
     String phoneNumber;
+    long createTime;
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
 
     public int getIdd() {
         return idd;
@@ -62,4 +71,6 @@ public class Photo implements Serializable{
     public void setAddress(String address) {
         this.address = address;
     }
+
+
 }

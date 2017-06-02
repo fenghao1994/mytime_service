@@ -74,6 +74,7 @@ public class UserInfoController {
 
     //忘记密码
     @RequestMapping(value = "/forget/password", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<String> forgetPassword(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
         User user = new User();
         user.setPhoneNumber(phoneNumber);

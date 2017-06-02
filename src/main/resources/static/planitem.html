@@ -21,7 +21,7 @@
 		<div style="margin: 15px;">
 			
 			<fieldset class="layui-elem-field">
-				<legend>PLANITEM</legend>
+				<legend>计划</legend>
 				<div class="layui-field-box" ng-app="allPlanItem" ng-controller="getAllPlanItem" ng-init="load()">
 					<div>
 						<!--<form >
@@ -69,7 +69,7 @@
 									<td ng-bind="x.editTime | date : 'yyyy-MM-dd HH:mm:ss'"></td>
 									<td>
 										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
-										<a ng-click="showPhoto(x.phoneNumber, x.address[0].objectId, x.address[0].objectType)"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>
+										<a ng-click="showPhoto(x.phoneNumber, x.createTime, x.address[0].objectType)"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>
 										<!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
 										<a ng-click="deletePlanItem(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>
@@ -120,14 +120,12 @@
 					});
 				}
 				$scope.deletePlanItem = function (idd) {
-					alert(idd);
 					$http({
 						method: 'POST',
 						url:'planItem/root/deletePlanItemFromDisk',
 						data: "idd=" + idd,
 						headers:{"Content-Type": "application/x-www-form-urlencoded"}
 					}).then(function successCallback(response){
-						alert("删除成功");
 						window.location.reload(true);
 					},function errorCallback(response){
 						alert("删除失败")

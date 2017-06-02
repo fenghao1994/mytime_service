@@ -214,8 +214,8 @@ public class PlanItemController {
     @RequestMapping("/completePlanItem")
     @ResponseBody
     @PermissionAnno
-    public String completePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id, @RequestParam("editTime") String editTime){
-        boolean flag = planItemService.completePlanItem(phoneNumber, id, editTime);
+    public String completePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("createTime") String createTime, @RequestParam("editTime") String editTime){
+        boolean flag = planItemService.completePlanItem(phoneNumber, createTime, editTime);
         if (flag){
             return "删除成功";
         }else {

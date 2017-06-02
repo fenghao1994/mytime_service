@@ -31,8 +31,10 @@ public class PermissionInterceptor implements HandlerInterceptor {
 //			Object bean = handlerMethod.getBean();
 			Method method = handlerMethod.getMethod();
 			if (method.getAnnotation(PermissionAnno.class) != null){
+				System.out.println("------------手机接口" + method.getName());
 				return true;
 			}
+			System.out.println("------------PC接口" + method.getName() + "-------" + request.getRequestURI());
 			Boolean isLogin = (Boolean) request.getSession().getAttribute("isLogin");
 			if (isLogin != null && isLogin){
 				return true;
