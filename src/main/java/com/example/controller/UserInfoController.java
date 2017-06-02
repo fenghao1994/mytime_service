@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.annotations.PermissionAnno;
 import com.example.bean.FeedBack;
 import com.example.bean.User;
 import com.example.configurer.Permission;
@@ -43,6 +44,7 @@ public class UserInfoController {
 
     //客户端登陆
     @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<String> login(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
         User user = new User();
         user.setPhoneNumber(phoneNumber);
@@ -57,6 +59,7 @@ public class UserInfoController {
 
     //注册
     @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<String> register(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
         User user = new User();
         user.setPhoneNumber(phoneNumber);
@@ -69,8 +72,23 @@ public class UserInfoController {
         }
     }
 
+    //忘记密码
+    @RequestMapping(value = "/forget/password", method = RequestMethod.POST)
+    public ResponseEntity<String> forgetPassword(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
+        User user = new User();
+        user.setPhoneNumber(phoneNumber);
+        user.setPassword(password);
+        boolean flag = userService.forgetPassword(user);
+        if (flag) {
+            return new ResponseEntity<>("{\"msg\":\"修改成功\"}", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("{\"msg\":\"修改失败，请确认账户和原密码\"}", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     //重置密码
     @RequestMapping(value = "/reset/password", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<String> resetPassword(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password, @RequestParam("newPassword") String newPassword) {
         User user = new User();
         user.setPhoneNumber(phoneNumber);
@@ -85,6 +103,7 @@ public class UserInfoController {
 
     //上传头像
     @RequestMapping(value = "/upload/headimg", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<String> uploadHeadImg(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("file") MultipartFile file) {
         boolean flag = userService.updateHeadImg(phoneNumber, file);
         if (flag) {
@@ -96,6 +115,7 @@ public class UserInfoController {
 
     //获取头像
     @RequestMapping(value = "/get/headimg", method = RequestMethod.POST)
+    @PermissionAnno
     public String getHeadImg(@RequestParam("phoneNumber") String phoneNumber) {
         String path = userService.getHeadImg(phoneNumber);
         return path;
@@ -142,6 +162,7 @@ public class UserInfoController {
 
     //管理员
     @RequestMapping(value = "/root/login", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<?> rootLogin(){
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -159,6 +180,7 @@ public class UserInfoController {
      * @return
      */
     @RequestMapping(value = "/feed_back" ,method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<?> feedBack(){
         String phoneNumber = request.getParameter("phoneNumber");
         long createTime = Long.parseLong(request.getParameter("createTime"));

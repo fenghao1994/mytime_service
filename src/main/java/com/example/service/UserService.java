@@ -223,4 +223,10 @@ public class UserService {
         }
         return arrayList;
     }
+
+    public boolean forgetPassword(User user) {
+        String sql = "UPDATE user SET password = ? WHERE phoneNumber = ?";
+        jdbcTemplate.update(sql, new Object[]{user.getPassword(), user.getPhoneNumber()});
+        return true;
+    }
 }

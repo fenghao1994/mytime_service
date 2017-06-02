@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.annotations.PermissionAnno;
 import com.example.bean.Note;
 import com.example.bean.Photo;
 import com.example.service.NoteService;
@@ -10,17 +11,12 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by fenghao on 2017/5/8.
@@ -34,6 +30,7 @@ public class NoteController {
 
     //保存note
     @RequestMapping("/saveNote")
+    @PermissionAnno
     public ResponseEntity<String> saveNote(HttpServletRequest request, @RequestParam(name = "addressFiles",required = false)MultipartFile[] files){
         String phoneNumber = request.getParameter("phoneNumber");
         int id = Integer.parseInt(request.getParameter("id"));
@@ -77,6 +74,7 @@ public class NoteController {
     }
     //更新note
     @RequestMapping("/updateNote")
+    @PermissionAnno
     public ResponseEntity<String> updateNote(HttpServletRequest request, @RequestParam(name = "addressFiles",required = false)MultipartFile[] files){
         String phoneNumber = request.getParameter("phoneNumber");
         int id = Integer.parseInt(request.getParameter("id"));
@@ -121,6 +119,7 @@ public class NoteController {
     }
     //获取note
     @RequestMapping("/getNote")
+    @PermissionAnno
     public ResponseEntity<List<Note>> getNote(@RequestParam("phoneNumber") String phoneNumber){
         if (phoneNumber.equals("undefined") || phoneNumber.equals("")) {
             return getAllNote();
@@ -130,6 +129,7 @@ public class NoteController {
     }
 
     @RequestMapping("/deleteNote")
+    @PermissionAnno
     @ResponseBody
     public String deleteNote(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id){
         boolean flag = noteService.deleteNote(phoneNumber, id);

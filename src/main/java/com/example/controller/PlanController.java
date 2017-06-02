@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.annotations.PermissionAnno;
 import com.example.bean.Plan;
 import com.example.service.PlanService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -26,6 +27,7 @@ public class PlanController {
 
     //保存plan
     @RequestMapping("/savePlan")
+    @PermissionAnno
     public void savePlan(HttpServletRequest request){
         int id = Integer.parseInt(request.getParameter("id"));
         long planId = Long.parseLong(request.getParameter("planId"));
@@ -53,6 +55,7 @@ public class PlanController {
 
     //更新plan
     @RequestMapping("/updatePlan")
+    @PermissionAnno
     public void updatePlan(HttpServletRequest request){
         int id = Integer.parseInt(request.getParameter("id"));
         long planId = Long.parseLong(request.getParameter("planId"));
@@ -78,6 +81,7 @@ public class PlanController {
     }
     //获取plan
     @RequestMapping("/getPlan")
+    @PermissionAnno
     public ResponseEntity<List<Plan>> getPlan(@RequestParam("phoneNumber") String phoneNumber){
         ArrayList<Plan> list = new ArrayList<>();
         if (phoneNumber.equals("undefined") || phoneNumber.equals("")) {

@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.annotations.PermissionAnno;
 import com.example.bean.Photo;
 import com.example.bean.PlanItem;
 import com.example.service.PlanItemService;
@@ -34,6 +35,7 @@ public class PlanItemController {
 
     //保存planitem
     @RequestMapping("/savePlanItem")
+    @PermissionAnno
     public ResponseEntity<String> savePlanItem(HttpServletRequest request, @RequestParam(name = "addressFiles",required = false
     )MultipartFile[] files){
         int id = Integer.parseInt(request.getParameter("id"));
@@ -112,6 +114,7 @@ public class PlanItemController {
 
     //更新planItem
     @RequestMapping("/updatePlanItem")
+    @PermissionAnno
     public ResponseEntity<String> updatePlanItem(HttpServletRequest request, @RequestParam(name = "addressFiles",required = false)MultipartFile[] files){
         int id = Integer.parseInt(request.getParameter("id"));
         long planId = Long.parseLong(request.getParameter("planId"));
@@ -190,6 +193,7 @@ public class PlanItemController {
 
     //获取planItem
     @RequestMapping("/getPlanItem")
+    @PermissionAnno
     public ResponseEntity<List<PlanItem>> getPlanItem(@RequestParam("phoneNumber") String phoneNumber){
         List<PlanItem> list = planItemService.getPlanItem(phoneNumber);
         return new ResponseEntity<List<PlanItem>>(list, HttpStatus.OK);
@@ -197,6 +201,7 @@ public class PlanItemController {
 
     @RequestMapping("/deletePlanItem")
     @ResponseBody
+    @PermissionAnno
     public String deletePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id){
         boolean flag = planItemService.deletePlanItem(phoneNumber, id);
         if (flag){
@@ -208,6 +213,7 @@ public class PlanItemController {
 
     @RequestMapping("/completePlanItem")
     @ResponseBody
+    @PermissionAnno
     public String completePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id, @RequestParam("editTime") String editTime){
         boolean flag = planItemService.completePlanItem(phoneNumber, id, editTime);
         if (flag){

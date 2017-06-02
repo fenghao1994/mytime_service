@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.annotations.PermissionAnno;
 import com.example.bean.RiJi;
 import com.example.service.RiJiService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -27,6 +28,7 @@ public class RiJiController {
     private RiJiService riJiService;
 
     @RequestMapping(value = "/save_riji", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<?> saveRiJi(HttpServletRequest request){
         String phoneNumber = request.getParameter("phoneNumber");
         int id = Integer.parseInt(request.getParameter("id"));
@@ -50,6 +52,7 @@ public class RiJiController {
     }
 
     @RequestMapping(value = "/getAllRiji", method = RequestMethod.POST)
+    @PermissionAnno
     public ResponseEntity<List<RiJi>> getAllRiji(HttpServletRequest request){
         String phoneNumber = request.getParameter("phoneNumber");
         List<RiJi> list = new ArrayList<>();
