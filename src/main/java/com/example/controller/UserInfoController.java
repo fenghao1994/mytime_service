@@ -156,7 +156,15 @@ public class UserInfoController {
         User user = userService.rootGetUser(phoneNumber);
         List<User> list = new ArrayList<>();
         list.add(user);
-        return new ResponseEntity<List<User>>(list, HttpStatus.OK);
+
+        Boolean isLogin = (Boolean) request.getSession().getAttribute("isLogin");
+        if (isLogin != null && isLogin){
+            return new ResponseEntity<List<User>>(list, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<List<User>>(list, HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 
 

@@ -89,7 +89,7 @@
 					}).then(function successCallback(response){
 						$scope.users = response.data;
 					},function errorCallback(response){
-						alert(response);
+						window.open("login.html");
 						console.info(response);
 					});
 				}
