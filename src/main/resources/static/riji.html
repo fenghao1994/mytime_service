@@ -48,7 +48,7 @@
 									<td>{{x.phoneNumber}}</td>
 									<td>{{x.content}}</td>
 									<td>{{x.weather}}</td>
-									<td>{{x.createTime}}</td>
+									<td ng-bind="x.createTime | date : 'yyyy-MM-dd HH:mm:ss'"></td>
 									<td>
 										<a ng-click="deleteNote(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>

@@ -10,15 +10,15 @@
 <body>
     <div ng-app="share" ng-controller="getShare">
         <#list list as item>
-            <p>标题: ${item.title}</p>
-            <p>内容: ${item.content}</p>
-            <p>预拨打电话: ${item.phoneNumberLianXi}</p>
+            <h1>标题: ${item.title}</h1>
+            <h3>内容: ${item.content}</h3>
+            <#--<p>预拨打电话: ${item.phoneNumberLianXi}</p>
             <p>与发送短信的号码: ${item.messagePhoneNumber}</p>
-            <p>预发送短信: ${item.messageContent}</p>
+            <p>预发送短信: ${item.messageContent}</p>-->
             <p>提醒时间: ${item.years}${item.months}${item.days}${item.hours}:${item.minutes}</p>
             <p>图片</p>
         <#list item.address as addr>
-            <img ng-src="{{changeStr('${addr.address}')}}" width="40px" height="40px">
+            <img ng-src="{{changeStr('${addr.address}')}}" width="200px" height="200px">
         </#list>
         </#list>
 

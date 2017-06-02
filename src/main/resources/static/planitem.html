@@ -65,8 +65,8 @@
 									<td>{{x.complete}}</td>
 									<td>{{x.delete}}</td>
 									<td>{{x.years + "." + x.months + "." + x.days + " " + x.hours + ":" + x.minutes}}</td>
-									<td>{{x.createTime}}</td>
-									<td>{{x.editTime}}</td>
+									<td ng-bind="x.createTime | date : 'yyyy-MM-dd HH:mm:ss'"></td>
+									<td ng-bind="x.editTime | date : 'yyyy-MM-dd HH:mm:ss'"></td>
 									<td>
 										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
 										<a ng-click="showPhoto(x.phoneNumber, x.address[0].objectId, x.address[0].objectType)"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>

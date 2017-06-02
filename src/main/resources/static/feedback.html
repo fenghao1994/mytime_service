@@ -43,7 +43,7 @@
                         <!-- <td><input type="checkbox"></td> -->
                         <td>{{x.id}}</td>
                         <td>{{x.phoneNumber}}</td>
-                        <td>{{x.createTime}}</td>
+                        <td ng-bind="x.createTime | date : 'yyyy-MM-dd HH:mm:ss'"></td>
                         <td>{{x.feedBack}}</td>
                         <td>
                             <a ng-click="deletePlan(x.id)" data-id="1" data-opt="del"
