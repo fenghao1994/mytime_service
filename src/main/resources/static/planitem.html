@@ -44,6 +44,7 @@
 									<th>子计划完成</th>
 									<th>子计划删除</th>
 									<th>提醒时间</th>
+									<th>是否公开</th>
 									<th>创建时间</th>
 									<th>最后修改时间</th>
 									<th>操作</th>
@@ -65,6 +66,7 @@
 									<td>{{x.complete}}</td>
 									<td>{{x.delete}}</td>
 									<td>{{x.years + "." + x.months + "." + x.days + " " + x.hours + ":" + x.minutes}}</td>
+									<td>{{x.open}}</td>
 									<td ng-bind="x.createTime | date : 'yyyy-MM-dd HH:mm:ss'"></td>
 									<td ng-bind="x.editTime | date : 'yyyy-MM-dd HH:mm:ss'"></td>
 									<td>

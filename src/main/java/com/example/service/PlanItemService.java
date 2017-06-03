@@ -33,14 +33,14 @@ public class PlanItemService {
         String sql = "INSERT INTO planitem (id, planId, title, content, createTime, editTime," +
                 "isEdit, phoneNumber, messageContent, messagePhoneNumber, location, phoneNumberLianXi, " +
                 "isEveryDay, isManyDays, isExpired, isComplete, isDelete, years, months," +
-                "days, hours, minutes, alarmWay, describes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
-                "?, ?, ?, ?, ?, ?)";
+                "days, hours, minutes, alarmWay, describes, openPlanItem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+                "?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, new Object[]{planItem.getId(), planItem.getPlanId(), planItem.getTitle(),
         planItem.getContent(), planItem.getCreateTime(), planItem.getEditTime(), planItem.isEdit(),
         planItem.getPhoneNumber(), planItem.getMessageContent(), planItem.getMessagePhoneNumber(), planItem.getLocation(),
         planItem.getPhoneNumberLianXi(), planItem.isEveryDay(), planItem.isManyDays(), planItem.isExpired(), planItem.isComplete(),
         planItem.isDelete(),planItem.getYears(), planItem.getMonths(), planItem.getDays(), planItem.getHours(), planItem.getMinutes(),
-        planItem.getAlarmWay(), planItem.getDescribes()});
+        planItem.getAlarmWay(), planItem.getDescribes(), planItem.getOpen()});
 
         if (planItem.getAddress() == null){
             return true;
@@ -63,13 +63,13 @@ public class PlanItemService {
         String sql = "UPDATE planitem SET title = ?, content = ?, editTime = ?," +
                 "isEdit = ?, messageContent = ?, messagePhoneNumber = ?, location = ?, phoneNumberLianXi = ?, " +
                 "isEveryDay = ?, isManyDays = ?, isExpired = ?, isComplete = ?, isDelete = ?, years = ?, months = ?," +
-                "days = ?, hours = ?, minutes = ?, alarmWay = ?, describes = ? WHERE phoneNumber = ? AND createTime = ? ";
+                "days = ?, hours = ?, minutes = ?, alarmWay = ?, describes = ?, openPlanItem = ? WHERE phoneNumber = ? AND createTime = ? ";
         int num = jdbcTemplate.update(sql, new Object[]{planItem.getTitle(),
                 planItem.getContent(), planItem.getEditTime(), planItem.isEdit(),
                 planItem.getMessageContent(), planItem.getMessagePhoneNumber(), planItem.getLocation(),
                 planItem.getPhoneNumberLianXi(), planItem.isEveryDay(), planItem.isManyDays(), planItem.isExpired(), planItem.isComplete(),
                 planItem.isDelete(),planItem.getYears(), planItem.getMonths(), planItem.getDays(), planItem.getHours(), planItem.getMinutes(),
-                planItem.getAlarmWay(), planItem.getDescribes(), planItem.getPhoneNumber(), planItem.getCreateTime()});
+                planItem.getAlarmWay(), planItem.getDescribes(), planItem.getOpen(), planItem.getPhoneNumber(), planItem.getCreateTime()});
 
         String sqlDelete = "DELETE FROM photo WHERE phoneNumber = ? AND objectType = ? AND " +
                 "createTime = ?";
@@ -103,6 +103,7 @@ public class PlanItemService {
                 planItem.setContent((String) mapArrayList.get(i).get("content"));
                 planItem.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
                 planItem.setEditTime((Long) mapArrayList.get(i).get("editTime"));
+                planItem.setOpen((String) mapArrayList.get(i).get("openPlanItem"));
                 byte[] b1 = (byte[]) mapArrayList.get(i).get("isEdit");
                 if (b1[0] == 0){
                     planItem.setEdit(false);
@@ -238,6 +239,7 @@ public class PlanItemService {
                 planItem.setContent((String) mapArrayList.get(i).get("content"));
                 planItem.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
                 planItem.setEditTime((Long) mapArrayList.get(i).get("editTime"));
+                planItem.setOpen((String) mapArrayList.get(i).get("openPlanItem"));
                 byte[] b1 = (byte[]) mapArrayList.get(i).get("isEdit");
                 if (b1[0] == 0){
                     planItem.setEdit(false);

@@ -62,6 +62,7 @@ public class PlanItemController {
         int minute = Integer.parseInt(request.getParameter("minute"));
         int alarmWay = Integer.parseInt(request.getParameter("alarmWay"));
         String describes = request.getParameter("describes");
+        String open = request.getParameter("open");
         String address = request.getParameter("address");
         List<MultipartFile> files1 = new ArrayList<>();
         if (files != null && files.length > 0){
@@ -94,6 +95,7 @@ public class PlanItemController {
         planItem.setMinutes(minute);
         planItem.setAlarmWay(alarmWay);
         planItem.setDescribes(describes);
+        planItem.setOpen(open);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -140,6 +142,7 @@ public class PlanItemController {
         int minute = Integer.parseInt(request.getParameter("minute"));
         int alarmWay = Integer.parseInt(request.getParameter("alarmWay"));
         String describes = request.getParameter("describes");
+        String open = request.getParameter("open");
         String address = request.getParameter("address");
         List<MultipartFile> files1 = new ArrayList<>();
         if (files != null && files.length > 0){
@@ -173,6 +176,7 @@ public class PlanItemController {
         planItem.setMinutes(minute);
         planItem.setAlarmWay(alarmWay);
         planItem.setDescribes(describes);
+        planItem.setOpen(open);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
