@@ -87,4 +87,16 @@ public class ShareController {
         boolean flag = shareService.changeFriendsRelationship(ownPhoneNumber, otherPhoneNumber, userActive);
         return new ResponseEntity<>( HttpStatus.OK);
     }
+
+    /**
+     * 获取某个人的公开计划
+     * @param phoneNumber
+     * @return
+     */
+    @RequestMapping(value = "/get/someone/share")
+    @PermissionAnno
+    public ResponseEntity<List<PlanItem>> getSomeoneShare(@RequestParam("phoneNumber") String phoneNumber){
+        List<PlanItem> list = shareService.getSomeoneShare(phoneNumber);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
