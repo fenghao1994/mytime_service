@@ -261,4 +261,26 @@ public class UserInfoController {
         boolean b = userService.updateUserInfo(user);
         return new ResponseEntity<List<FeedBack>>(HttpStatus.OK);
     }
+
+    /**
+     * 保存用户的label
+     * @param phoneNumber
+     * @param label
+     * @return
+     */
+    @RequestMapping(value = "/user_label", method = RequestMethod.POST)
+    @PermissionAnno
+    public ResponseEntity<?> saveUserLabel(@RequestParam("phoneNumber")String phoneNumber,
+                                           @RequestParam("label")String label){
+        boolean flag = userService.saveUserLabel(phoneNumber, label);
+        return new ResponseEntity<List<FeedBack>>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/delete/label", method = RequestMethod.POST)
+    @PermissionAnno
+    public ResponseEntity<?> deleteUserLabel(@RequestParam("phoneNumber")String phoneNumber,
+                                             @RequestParam("label")String label){
+        boolean flag = userService.deleteUserLabel(phoneNumber, label);
+        return new ResponseEntity<List<FeedBack>>(HttpStatus.OK);
+    }
 }

@@ -65,6 +65,17 @@ public class UserService {
             user1 = null;
         }
         if (user1 != null && user1.getPassword().equals(user.getPassword())){
+            List<String> listString = new ArrayList<>();
+            String sql = "SELECT * FROM userlabel WHERE phoneNumber = ?";
+            List<Map<String, Object>> mapArrayList = new ArrayList<>();
+            mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{user1.getPhoneNumber()});
+            if (mapArrayList != null && mapArrayList.size() > 0){
+                for (int i = 0; i < mapArrayList.size(); i++){
+                    String str = (String) mapArrayList.get(i).get("label");
+                    listString.add(str);
+                }
+            }
+            user1.setLabel(listString);
             return user1;
         }
         return null;
@@ -242,6 +253,30 @@ public class UserService {
         String sql = "UPDATE user SET personalizedSignature = ?, selfIntroduction = ?, userName = ? WHERE phoneNumber = ?";
         jdbcTemplate.update(sql, new Object[]{user.getPersonalizedSignature(),
                 user.getSelfIntroduction(), user.getUserName(), user.getPhoneNumber()});
+        return true;
+    }
+
+    /**
+     * 保存用户的label
+     * @param phoneNumber
+     * @param label
+     */
+    public boolean saveUserLabel(String phoneNumber, String label) {
+        String sql = "INSERT INTO userlabel(phoneNumber, label) VALUES (?, ?)";
+        jdbcTemplate.update(sql, new Object[]{phoneNumber, label});
+        return true;
+    }
+
+
+    /**
+     * 删除用户的label
+     * @param phoneNumber
+     * @param label
+     * @return
+     */
+    public boolean deleteUserLabel(String phoneNumber, String label) {
+        String sql = "DELETE FROM userlabel WHERE phoneNumber = ? AND label = ?";
+        jdbcTemplate.update(sql, new Object[]{phoneNumber, label});
         return true;
     }
 }
