@@ -45,15 +45,15 @@ public class UserInfoController {
     //客户端登陆
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @PermissionAnno
-    public ResponseEntity<String> login(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
+    public ResponseEntity<?> login(@RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
         User user = new User();
         user.setPhoneNumber(phoneNumber);
         user.setPassword(password);
-        boolean flag = userService.login(user);
-        if (flag) {
-            return new ResponseEntity<>("{\"msg\":\"登陆成功\"}", HttpStatus.OK);
+        User user1 = userService.login(user);
+        if (user1 != null) {
+            return new ResponseEntity<>(user1, HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>("{\"msg\":\"登陆失败，账户错误或者密码错误\"}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -236,5 +236,29 @@ public class UserInfoController {
             list = userService.getFeedBackWithPhoneNumber(phoneNumber);
         }
         return new ResponseEntity<List<FeedBack>>(list, HttpStatus.OK);
+    }
+
+    /**
+     * 更新用户信息
+     * @param phoneNumber
+     * @param personalizedSignature
+     * @param selfIntroduction
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/user_message", method = RequestMethod.POST)
+    @PermissionAnno
+    public ResponseEntity<?> updateUserMessage(@RequestParam("phoneNumber")String phoneNumber,
+                                               @RequestParam("personalizedSignature")String personalizedSignature,
+                                               @RequestParam("selfIntroduction")String selfIntroduction,
+                                               @RequestParam("userName") String userName){
+        User user = new User();
+        user.setPhoneNumber(phoneNumber);
+        user.setPersonalizedSignature(personalizedSignature);
+        user.setSelfIntroduction(selfIntroduction);
+        user.setUserName(userName);
+
+        boolean b = userService.updateUserInfo(user);
+        return new ResponseEntity<List<FeedBack>>(HttpStatus.OK);
     }
 }

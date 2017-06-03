@@ -55,7 +55,7 @@ public class UserService {
     }
 
     //登陆
-    public boolean login(User user){
+    public User login(User user){
         String sql1 = "SELECT * FROM user WHERE phoneNumber = ?";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         User user1;
@@ -65,9 +65,9 @@ public class UserService {
             user1 = null;
         }
         if (user1 != null && user1.getPassword().equals(user.getPassword())){
-            return true;
+            return user1;
         }
-        return false;
+        return null;
     }
 
     //重置密码
@@ -129,6 +129,9 @@ public class UserService {
                 user.setId((Integer) mapArrayList.get(i).get("id"));
                 user.setPhoneNumber((String) mapArrayList.get(i).get("phoneNumber"));
                 user.setHeadImg((String) mapArrayList.get(i).get("headImg"));
+                user.setUserName((String) mapArrayList.get(i).get("userName"));
+                user.setSelfIntroduction((String) mapArrayList.get(i).get("selfIntroduction"));
+                user.setPersonalizedSignature((String) mapArrayList.get(i).get("personalizedSignature"));
                 allUser.add(user);
             }
         }
@@ -227,6 +230,18 @@ public class UserService {
     public boolean forgetPassword(User user) {
         String sql = "UPDATE user SET password = ? WHERE phoneNumber = ?";
         jdbcTemplate.update(sql, new Object[]{user.getPassword(), user.getPhoneNumber()});
+        return true;
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    public boolean updateUserInfo(User user) {
+        String sql = "UPDATE user SET personalizedSignature = ?, selfIntroduction = ?, userName = ? WHERE phoneNumber = ?";
+        jdbcTemplate.update(sql, new Object[]{user.getPersonalizedSignature(),
+                user.getSelfIntroduction(), user.getUserName(), user.getPhoneNumber()});
         return true;
     }
 }

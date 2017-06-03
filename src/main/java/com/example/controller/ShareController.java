@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.annotations.PermissionAnno;
+import com.example.bean.Friend;
 import com.example.bean.FriendShare;
 import com.example.bean.Photo;
 import com.example.bean.PlanItem;
@@ -38,6 +39,12 @@ public class ShareController {
         return "share";
     }
 
+    /**
+     * 获取朋友分享的计划
+     * @param message
+     * @param phoneNumber
+     * @return
+     */
     @RequestMapping(value = "/friend/open", method = RequestMethod.POST)
     @PermissionAnno
     public ResponseEntity<List<FriendShare>> getFriendOpen(@RequestParam("message") String message, @RequestParam("phoneNumber") String phoneNumber){
@@ -50,5 +57,34 @@ public class ShareController {
         }
         List<FriendShare> list = shareService.getFriendOpen(maps, phoneNumber);
         return new ResponseEntity<List<FriendShare>>(list, HttpStatus.OK);
+    }
+
+    /**
+     * 获取朋友列表
+     * @param message
+     * @param phoneNumber
+     * @return
+     */
+    @RequestMapping(value = "/friends", method = RequestMethod.POST)
+    @PermissionAnno
+    public ResponseEntity<List<Friend>> getFriends(@RequestParam("message") String message, @RequestParam("phoneNumber") String phoneNumber){
+        List<Map<String, String>> maps = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            maps = objectMapper.readValue(message, new TypeReference<ArrayList<Map<String, String>>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Friend> list = shareService.getFriends(maps, phoneNumber);
+        return new ResponseEntity<List<Friend>>(list, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/change/friend/relationship")
+    @PermissionAnno
+    public ResponseEntity<?> changeFriendsRelationship(@RequestParam("ownPhoneNumber")String ownPhoneNumber,
+                                                       @RequestParam("otherPhoneNumber")String otherPhoneNumber,
+                                                       @RequestParam("userActive")String userActive) {
+        boolean flag = shareService.changeFriendsRelationship(ownPhoneNumber, otherPhoneNumber, userActive);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 }

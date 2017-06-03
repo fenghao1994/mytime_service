@@ -1,9 +1,6 @@
 package com.example.service;
 
-import com.example.bean.FriendShare;
-import com.example.bean.Photo;
-import com.example.bean.PlanItem;
-import com.example.bean.User;
+import com.example.bean.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -140,8 +137,65 @@ public class ShareService {
             }
         }
         List<FriendShare> listFriendShare = getFriendOpenPlanItem(friendList);
+        for (int i = 0 ;i < listFriendShare.size(); i++){
+            String sql = "SELECT * FROM userrelationshiip WHERE ownPhoneNumber = " + phoneNumber + "  AND otherPhoneNumber = " + listFriendShare.get(i).getPlanItem().getPhoneNumber();
+            List<Map<String, Object>> mapArrayList = new ArrayList<>();
+            mapArrayList = jdbcTemplate.queryForList(sql);
+            if (mapArrayList != null && mapArrayList.size() > 0) {
+                for (int j = 0; j< mapArrayList.size(); j++){
+                    String str = (String) mapArrayList.get(j).get("userActive");
+                    if (str.equals("HITE")){
+                        listFriendShare.remove(i);
+                        break;
+                    }
+                }
+            }
+        }
 
         return listFriendShare;
+    }
+
+    public List<Friend> getFriends(List<Map<String, String>> maps, String phoneNumber) {
+        List<User> list = userService.getAllUser();
+        List<String> phoneNumberList = new ArrayList<>();
+        //将所有的用户的电话号放入list  contains比对时需要string类型
+        for (int i = 0; i < maps.size(); i++){
+            phoneNumberList.add(maps.get(i).get("phoneNumber"));
+        }
+        List<User> friendList = new ArrayList<>();
+        //将所有的朋友放入friendList中
+        for (int i = 0 ; i < list.size(); i++){
+            if (phoneNumberList.contains(list.get(i).getPhoneNumber())){
+                friendList.add(list.get(i));
+            }
+        }
+        //如果friendlilst中有自己的号码 则删掉
+        for (int i = 0; i < friendList.size(); i++){
+            if (friendList.get(i).getPhoneNumber().equals(phoneNumber)){
+                friendList.remove(i);
+            }
+        }
+        List<Friend> friendRelationship = new ArrayList<>();
+        //找出与朋友的关系  关注还是屏蔽还是默认
+        for (int i = 0; i < friendList.size(); i++){
+            String active = "WATCH";
+            String sql = "SELECT * FROM userrelationshiip WHERE ownPhoneNumber = " + phoneNumber + "  AND otherPhoneNumber = " + friendList.get(i).getPhoneNumber();
+
+            List<Map<String, Object>> mapArrayList = new ArrayList<>();
+            mapArrayList = jdbcTemplate.queryForList(sql);
+
+            if (mapArrayList != null && mapArrayList.size() > 0) {
+                active = (String) mapArrayList.get(0).get("userActive");
+            }
+
+            Friend friend = new Friend();
+            friend.setUser( friendList.get(i));
+            friend.setUserActive(active);
+            friendRelationship.add(friend);
+        }
+
+
+        return friendRelationship;
     }
 
     public List<FriendShare> getFriendOpenPlanItem(List<User> friendList){
@@ -219,5 +273,20 @@ public class ShareService {
             }
         }
         return friendShareList;
+    }
+
+
+    public boolean changeFriendsRelationship(String ownPhoneNumber, String otherPhoneNumber, String userActive) {
+        String sql = "SELECT * FROM userrelationshiip WHERE ownPhoneNumber = " + ownPhoneNumber + "  AND otherPhoneNumber = " + otherPhoneNumber;
+        List<Map<String, Object>> mapArrayList = new ArrayList<>();
+        mapArrayList = jdbcTemplate.queryForList(sql);
+        if (mapArrayList != null && mapArrayList.size() > 0) {
+            String sql1 = "UPDATE userrelationshiip SET userActive = ? WHERE ownPhoneNumber = ? AND otherPhoneNumber = ?";
+            jdbcTemplate.update(sql1, new Object[]{userActive, ownPhoneNumber, otherPhoneNumber});
+        }else {
+            String sql1 = "INSERT INTO userrelationshiip(ownPhoneNumber, otherPhoneNumber, userActive) VALUES(?, ?, ?)";
+            jdbcTemplate.update(sql1, new Object[]{ownPhoneNumber, otherPhoneNumber, userActive});
+        }
+        return true;
     }
 }
