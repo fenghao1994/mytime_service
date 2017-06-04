@@ -227,11 +227,11 @@ public class NoteService {
         return true;
     }
 
-    public List<Photo> getPhotos(String phoneNumber, String objectId, String objectType) {
+    public List<Photo> getPhotos(String phoneNumber, String createTime, String objectType) {
         ArrayList<Photo> photos = new ArrayList<>();
-        String sql = "SELECT * FROM photo WHERE phoneNumber = ? AND objectId = ? AND objectType = ?";
+        String sql = "SELECT * FROM photo WHERE phoneNumber = ? AND createTime = ? AND objectType = ?";
         List<Map<String, Object>> photoMap = new ArrayList<>();
-        photoMap = jdbcTemplate.queryForList(sql, new Object[]{phoneNumber, objectId, objectType});
+        photoMap = jdbcTemplate.queryForList(sql, new Object[]{phoneNumber, createTime, objectType});
         if (photoMap != null && photoMap.size() > 0){
             for (int j = 0 ; j < photoMap.size(); j++){
                 Photo photo = new Photo();

@@ -34,15 +34,15 @@
 									<!-- <th><input type="checkbox" id="selected-all"></th> -->
 									<th>ID</th>
 									<th>所属账号</th>
-									<th>子计划标题</th>
-									<th>子计划内容</th>
+									<th>计划标题</th>
+									<th>计划内容</th>
 									<th>预拨打电话号</th>
 									<th>预发送短信号</th>
 									<th>预发送短信内容</th>
 									<th>预定位位置</th>
 									<th>每日提醒</th>
-									<th>子计划完成</th>
-									<th>子计划删除</th>
+									<th>计划完成</th>
+									<th>计划删除</th>
 									<th>提醒时间</th>
 									<th>是否公开</th>
 									<th>创建时间</th>
@@ -73,6 +73,7 @@
 										<!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
 										<a ng-click="showPhoto(x.phoneNumber, x.createTime, x.address[0].objectType)"  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>
 										<!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
+										<a ng-click="showPingLun(x.createTime)" class="layui-btn layui-btn-mini">评论</a>
 										<a ng-click="deletePlanItem(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
 									</td>
 								</tr>
@@ -134,10 +135,16 @@
 						alert(response);
 					});
 				}
-				$scope.showPhoto = function (phoneNumber,objectId,objectType) {
+				$scope.showPhoto = function (phoneNumber,createTime,objectType) {
 					parent.tab.tabAdd({
-						href: '/photoshow.html?phoneNumber=' + phoneNumber + '&objectId=' + objectId + '&objectType=' + objectType, //地址
+						href: '/photoshow.html?phoneNumber=' + phoneNumber + '&createTime=' + createTime + '&objectType=' + objectType, //地址
 						title: '图片'
+					});
+				};
+				$scope.showPingLun = function (createTime) {
+					parent.tab.tabAdd({
+						href: '/pinglun.html?createTime=' + createTime,
+						title: '评论'
 					});
 				};
 			});

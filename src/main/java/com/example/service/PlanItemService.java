@@ -297,9 +297,9 @@ public class PlanItemService {
 
         for (int i = 0; i< list.size() ;i++){
             ArrayList<Photo> photos = new ArrayList<>();
-            String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND objectId = ? AND objectType = ?";
+            String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND createTime = ? AND objectType = ?";
             List<Map<String, Object>> photoMap = new ArrayList<>();
-            photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getId(), "1"});
+            photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getCreateTime(), "1"});
             if (photoMap != null && photoMap.size() > 0){
                 for (int j = 0 ; j < photoMap.size(); j++){
                     Photo photo = new Photo();
@@ -343,9 +343,21 @@ public class PlanItemService {
                 pingLun.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
                 pingLun.setDeletePinglun((String) mapArrayList.get(i).get("deletePinglun"));
                 pingLun.setEditTime((Long) mapArrayList.get(i).get("editTime"));
+                pingLun.setId((Integer) mapArrayList.get(i).get("id"));
                 list.add(pingLun);
             }
         }
         return list;
+    }
+
+    /**
+     * 管理员删除评论
+     * @param id
+     * @return
+     */
+    public boolean deletePinglun(int id) {
+        String sql = "DELETE FROM pinglun WHERE id = ?";
+        jdbcTemplate.update(sql, new Object[]{id});
+        return true;
     }
 }

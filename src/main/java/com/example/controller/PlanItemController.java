@@ -229,11 +229,11 @@ public class PlanItemController {
     }
 
     @RequestMapping("/getPlanItemWithPlanIdAndPhoneNumber")
-    public List<PlanItem> getPlanItemWithPlanIdAndPhoneNumber(@RequestParam("phoneNumber")String phoneNumber,
+    public ResponseEntity<List<PlanItem>> getPlanItemWithPlanIdAndPhoneNumber(@RequestParam("phoneNumber")String phoneNumber,
                                                               @RequestParam("planId")String planId){
         List<PlanItem> list = new ArrayList<>();
         list = planItemService.getPlanItemWithPlanIdAndPhoneNumber(phoneNumber, planId);
-        return list;
+        return new ResponseEntity<List<PlanItem>>(list, HttpStatus.OK);
     }
 
     @RequestMapping("/root/deletePlanItemFromDisk")
@@ -277,5 +277,14 @@ public class PlanItemController {
     public ResponseEntity<List<PingLun>> getPingLun(@RequestParam("createTime")long createTime){
         List<PingLun> luns = planItemService.getPingLun(createTime);
         return new ResponseEntity<List<PingLun>>(luns,HttpStatus.OK);
+    }
+
+    /**
+     * 管理员删除评论
+     */
+    @RequestMapping("/deletePinglun")
+    public ResponseEntity<?> rootDeletePinglun(@RequestParam("id") int id){
+        boolean flag = planItemService.deletePinglun(id);
+        return new ResponseEntity<List<PingLun>>(HttpStatus.OK);
     }
 }

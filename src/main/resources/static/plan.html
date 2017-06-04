@@ -34,7 +34,7 @@
 									<!-- <th><input type="checkbox" id="selected-all"></th> -->
 									<th>ID</th>
 									<th>所属账号</th>
-									<th>计划主题</th>
+									<th>主题</th>
 									<th>创建时间</th>
 									<th>最后修改时间</th>
 									<th>操作</th>
@@ -121,6 +121,7 @@
 					});
 				}
 				$scope.showPlanItem = function (planId,phoneNumber) {
+					console.info(planId, phoneNumber);
 					parent.tab.tabAdd({
 						href: 'planitem.html?planId=' + planId + '&phoneNumber=' + phoneNumber, //地址
 						title: 'PLANITEM'

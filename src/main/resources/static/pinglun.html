@@ -19,17 +19,17 @@
 <div style="margin: 15px;">
 
     <fieldset class="layui-elem-field">
-        <legend>PHOTO</legend>
-        <div class="layui-field-box" ng-app="photo" ng-controller="getPhoto" ng-init="load()">
+        <legend>评论</legend>
+        <div class="layui-field-box" ng-app="pinglun" ng-controller="getPinglun" ng-init="load()">
             <div>
                 <table class="site-table table-hover">
                     <thead>
                     <tr>
                         <!-- <th><input type="checkbox" id="selected-all"></th> -->
-                        <th>图片ID</th>
+                        <th>ID</th>
                         <th>所属用户</th>
-                        <th>图片地址</th>
-                        <th>图片</th>
+                        <th>评论内容</th>
+                        <th>评论时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -37,15 +37,16 @@
                     <tbody id="con" >
                     <tr ng-repeat = "x in photos">
                         <!-- <td><input type="checkbox"></td> -->
-                        <td>{{x.idd}}</td>
+                        <td>{{x.id}}</td>
                         <td>{{x.phoneNumber}}</td>
-                        <td>{{x.address}}</td>
-                        <td><img ng-src="{{changeStr(x.address)}}" width="40px" height="40px"></td>
+                        <td>{{x.content}}</td>
+                        <td>{{x.editTime}}</td>
+                       <!-- <td><img ng-src="{{changeStr(x.address)}}" width="40px" height="40px"></td>-->
                         <td>
                             <!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
                          <!--   <a href =""  target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">图片</a>-->
                             <!--<a href="/edituser.html?id={{x.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
-                            <a ng-click="deletePhoto(x.idd)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+                            <a ng-click="deletePinglun(x.id)" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
                         </td>
                     </tr>
                     </tbody>
@@ -56,18 +57,16 @@
 </div>
 
     <script>
-        var app = angular.module('photo', []);
+        var app = angular.module('pinglun', []);
 
-        app.controller('getPhoto', function($scope, $http) {
+        app.controller('getPinglun', function($scope, $http) {
             var url = getParams();
-            $scope.phoneNumber = url.phoneNumber;
             $scope.createTime = url.createTime;
-            $scope.objectType = url.objectType;
             $scope.load = function () {
                 $http({
                     method: 'POST',
-                    url: 'note/getPhotos',
-                    data: "phoneNumber=" + $scope.phoneNumber + "&createTime=" + $scope.createTime + "&objectType=" + $scope.objectType,
+                    url: 'planItem/get/pinglun',
+                    data: "createTime=" + $scope.createTime,
                     headers:{"Content-Type": "application/x-www-form-urlencoded"}
                 }).then(function successCallback(response) {
                     console.info(response.data);
@@ -76,11 +75,11 @@
                     console.info(response);
                 });
             }
-            $scope.deletePhoto = function (idd) {
+            $scope.deletePinglun = function (id) {
                 $http({
                     method: 'POST',
-                    url: 'note/deletePhoto',
-                    data: "idd=" + idd,
+                    url: 'planItem/deletePinglun',
+                    data: "id=" + id,
                     headers:{"Content-Type": "application/x-www-form-urlencoded"}
                 }).then(function successCallback(response) {
                     alert("删除成功");
@@ -89,10 +88,10 @@
                     alert("删除失败");
                 })
             }
-            $scope.changeStr = function(param) {
+           /* $scope.changeStr = function(param) {
                 var param = param.substring(8);
                 return '/pics/' + param;
-            };
+            };*/
         });
 
         function getParams() {

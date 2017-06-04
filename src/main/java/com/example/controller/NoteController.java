@@ -158,9 +158,9 @@ public class NoteController {
 
     @RequestMapping(value = "/getPhotos", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> getPhotos(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("objectId") String objectId,
+    public ResponseEntity<?> getPhotos(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("createTime") String createTime,
     @RequestParam("objectType")String objectType){
-        List<Photo> list = noteService.getPhotos(phoneNumber, objectId, objectType);
+        List<Photo> list = noteService.getPhotos(phoneNumber, createTime, objectType);
         if (list != null && list.size() > 0){
             return new ResponseEntity<>(list, HttpStatus.OK);
         }else {
