@@ -194,6 +194,22 @@ public class ShareService {
             friendRelationship.add(friend);
         }
 
+        //获取朋友的标签
+        for (int i = 0; i < friendRelationship.size(); i++){
+            List<String> listString = new ArrayList<>();
+            Friend friend = friendRelationship.get(i);
+            String sql = "SELECT * FROM userlabel WHERE phoneNumber = ?";
+            List<Map<String, Object>> mapArrayList = new ArrayList<>();
+            mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{friend.getUser().getPhoneNumber()});
+            if (mapArrayList != null && mapArrayList.size() > 0){
+                for (int j = 0; j < mapArrayList.size(); j++){
+                    String str = (String) mapArrayList.get(j).get("label");
+                    listString.add(str);
+                }
+                friend.getUser().setLabel(listString);
+            }
+        }
+
 
         return friendRelationship;
     }
