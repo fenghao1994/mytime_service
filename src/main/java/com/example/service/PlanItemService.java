@@ -211,9 +211,9 @@ public class PlanItemService {
         return true;
     }
 
-    public boolean deletePlanItem(String phoneNumber, String id) {
-        String sql = "UPDATE planitem SET isDelete = 1 WHERE phoneNumber = ? AND id = ?";
-        jdbcTemplate.update(sql, new Object[]{phoneNumber, id});
+    public boolean deletePlanItem(String phoneNumber, long createTime) {
+        String sql = "UPDATE planitem SET isDelete = 1 WHERE phoneNumber = ? AND createTime = ?";
+        jdbcTemplate.update(sql, new Object[]{phoneNumber, createTime});
         return true;
     }
 

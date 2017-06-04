@@ -207,8 +207,8 @@ public class PlanItemController {
     @RequestMapping("/deletePlanItem")
     @ResponseBody
     @PermissionAnno
-    public String deletePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("id") String id){
-        boolean flag = planItemService.deletePlanItem(phoneNumber, id);
+    public String deletePlanItem(@RequestParam("phoneNumber")String phoneNumber, @RequestParam("createTime") long createTime){
+        boolean flag = planItemService.deletePlanItem(phoneNumber, createTime);
         if (flag){
             return "删除成功";
         }else {
@@ -267,6 +267,11 @@ public class PlanItemController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    /**
+     * 获取评论
+     * @param createTime
+     * @return
+     */
     @RequestMapping("/get/pinglun")
     @PermissionAnno
     public ResponseEntity<List<PingLun>> getPingLun(@RequestParam("createTime")long createTime){
