@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.annotations.PermissionAnno;
 import com.example.bean.Photo;
+import com.example.bean.PingLun;
 import com.example.bean.PlanItem;
 import com.example.service.PlanItemService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -243,5 +244,33 @@ public class PlanItemController {
         } else {
             return new ResponseEntity<String>("{\"msg\":\"删除失败\"}", HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    /**
+     * 增加评论
+     * @param content
+     * @param phoneNumber
+     * @param createTime
+     * @param editTime
+     * @param deletePinglun
+     * @return
+     */
+    @RequestMapping("/pinglun")
+    @PermissionAnno
+    public ResponseEntity<?> pingLun(@RequestParam("content") String content,
+                                     @RequestParam("phoneNumber")String phoneNumber,
+                                     @RequestParam("createTime")long createTime,
+                                     @RequestParam("editTime")long editTime,
+                                     @RequestParam("deletePinglun")String deletePinglun){
+        boolean flag = planItemService.pingLun(content, phoneNumber, createTime, editTime, deletePinglun);
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @RequestMapping("/get/pinglun")
+    @PermissionAnno
+    public ResponseEntity<List<PingLun>> getPingLun(@RequestParam("createTime")long createTime){
+        List<PingLun> luns = planItemService.getPingLun(createTime);
+        return new ResponseEntity<List<PingLun>>(luns,HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.bean.Photo;
+import com.example.bean.PingLun;
 import com.example.bean.PlanItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -320,5 +321,31 @@ public class PlanItemService {
         jdbcTemplate.update(sql, new Object[]{idd});
         return true;
 
+    }
+
+    public boolean pingLun(String content, String phoneNumber, long createTime, long editTime, String deletePinglun) {
+        String sql = "INSERT INTO pinglun(content, phoneNumber, createTime, editTime, deletePinglun) VALUES(?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, new Object[]{content, phoneNumber, createTime, editTime, deletePinglun});
+        return true;
+    }
+
+    public List<PingLun> getPingLun(long createTime) {
+        ArrayList<PingLun> list = new ArrayList<>();
+        String sql = "SELECT * FROM pinglun WHERE createTime = ?";
+
+        List<Map<String, Object>> mapArrayList = new ArrayList<>();
+        mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{createTime});
+        if (mapArrayList != null && mapArrayList.size() > 0){
+            for (int i = 0; i < mapArrayList.size(); i++){
+                PingLun pingLun = new PingLun();
+                pingLun.setPhoneNumber((String) mapArrayList.get(i).get("phoneNumber"));
+                pingLun.setContent((String) mapArrayList.get(i).get("content"));
+                pingLun.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
+                pingLun.setDeletePinglun((String) mapArrayList.get(i).get("deletePinglun"));
+                pingLun.setEditTime((Long) mapArrayList.get(i).get("editTime"));
+                list.add(pingLun);
+            }
+        }
+        return list;
     }
 }
