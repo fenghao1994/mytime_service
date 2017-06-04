@@ -146,6 +146,22 @@ public class UserService {
                 allUser.add(user);
             }
         }
+
+        //查询label
+        for (int i = 0; i < allUser.size(); i++){
+            String sql1 = "SELECT * FROM userlabel WHERE phoneNumber = ?";
+            List<Map<String, Object>> mapArrayList1 = new ArrayList<>();
+            mapArrayList1 = jdbcTemplate.queryForList(sql1, new Object[]{allUser.get(i).getPhoneNumber()});
+            List<String> stringList = new ArrayList<>();
+            if (mapArrayList1 != null && mapArrayList1.size() > 0){
+                for (int j = 0; j < mapArrayList1.size(); j++){
+                    String str2 = (String) mapArrayList1.get(j).get("label");
+                    stringList.add(str2);
+                }
+            }
+            allUser.get(i).setLabel(stringList);
+        }
+
         return allUser;
     }
 
