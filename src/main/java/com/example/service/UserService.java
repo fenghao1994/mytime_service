@@ -186,6 +186,20 @@ public class UserService {
         }catch (Exception e){
             user = null;
         }
+
+        if (user != null){
+            List<String> listString = new ArrayList<>();
+            String sql1 = "SELECT * FROM userlabel WHERE phoneNumber = ?";
+            List<Map<String, Object>> mapArrayList = new ArrayList<>();
+            mapArrayList = jdbcTemplate.queryForList(sql1, new Object[]{user.getPhoneNumber()});
+            if (mapArrayList != null && mapArrayList.size() > 0){
+                for (int i = 0; i < mapArrayList.size(); i++){
+                    String str = (String) mapArrayList.get(i).get("label");
+                    listString.add(str);
+                }
+            }
+            user.setLabel(listString);
+        }
         return user;
     }
 

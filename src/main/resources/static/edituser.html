@@ -29,9 +29,10 @@
         edit.controller('editUserPassword', ['$scope', '$location', '$http', function ($scope, $location, $http) {
             var url = getParams();
             $scope.id = url.id;
-
+            console.info($scope.id);
             $scope.submitInfo = function (id) {
                 var password = $scope.password;
+                console.info(password);
                 $http({
                     method: 'post',
                     url:'user/root/resetPassword',
