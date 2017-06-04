@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.istack.internal.Nullable;
+import com.sun.org.apache.bcel.internal.generic.PUSH;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -285,6 +286,17 @@ public class PlanItemController {
     @RequestMapping("/deletePinglun")
     public ResponseEntity<?> rootDeletePinglun(@RequestParam("id") int id){
         boolean flag = planItemService.deletePinglun(id);
+        return new ResponseEntity<List<PingLun>>(HttpStatus.OK);
+    }
+
+    /**
+     * 刷新定位字段
+     */
+    @RequestMapping("/update/location")
+    @PermissionAnno
+    public ResponseEntity<?> updateLoctation(@RequestParam("phoneNumber")String phoneNumber,
+                                             @RequestParam("createTime") long createTime){
+        planItemService.updateLocation(phoneNumber, createTime);
         return new ResponseEntity<List<PingLun>>(HttpStatus.OK);
     }
 }

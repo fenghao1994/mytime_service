@@ -360,4 +360,9 @@ public class PlanItemService {
         jdbcTemplate.update(sql, new Object[]{id});
         return true;
     }
+
+    public void updateLocation(String phoneNumber, long createTime) {
+        String sql = "UPDATE planitem SET describes = ? WHERE phoneNumber = ? AND createTime = ?";
+        jdbcTemplate.update(sql, new Object[]{"LOCATED", phoneNumber, createTime});
+    }
 }

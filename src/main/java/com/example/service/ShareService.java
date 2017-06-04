@@ -217,9 +217,9 @@ public class ShareService {
     public List<FriendShare> getFriendOpenPlanItem(List<User> friendList) {
         List<FriendShare> friendShareList = new ArrayList<>();
         for (int j = 0; j < friendList.size(); j++) {
-            String sql = "SELECT * FROM planitem WHERE phoneNumber = ? AND openPlanItem = ?";
+            String sql = "SELECT * FROM planitem WHERE phoneNumber = ? AND openPlanItem = ? AND isDelete = ?";
             List<Map<String, Object>> mapArrayList = new ArrayList<>();
-            mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{friendList.get(j).getPhoneNumber(), "OPEN"});
+            mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{friendList.get(j).getPhoneNumber(), "OPEN", 0});
             if (mapArrayList != null && mapArrayList.size() > 0) {
                 for (int i = 0; i < mapArrayList.size(); i++) {
                     FriendShare friendShare = new FriendShare();
@@ -327,9 +327,9 @@ public class ShareService {
 
     public List<PlanItem> getSomeoneShare(String phoneNumber) {
         List<PlanItem> list = new ArrayList<>();
-        String sql = "SELECT * FROM planitem WHERE phoneNumber = ? AND openPlanItem = ?";
+        String sql = "SELECT * FROM planitem WHERE phoneNumber = ? AND openPlanItem = ? AND isDelete = ?";
         List<Map<String, Object>> mapArrayList = new ArrayList<>();
-        mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{phoneNumber, "OPEN"});
+        mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{phoneNumber, "OPEN", 0});
         if (mapArrayList != null && mapArrayList.size() > 0) {
             for (int i = 0; i < mapArrayList.size(); i++) {
                 PlanItem planItem = new PlanItem();

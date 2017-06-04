@@ -15,7 +15,7 @@
             <#--<p>预拨打电话: ${item.phoneNumberLianXi}</p>
             <p>与发送短信的号码: ${item.messagePhoneNumber}</p>
             <p>预发送短信: ${item.messageContent}</p>-->
-            <p>提醒时间: ${item.years}${item.months}${item.days}${item.hours}:${item.minutes}</p>
+            <p>提醒时间: ${item.years}.${item.months}.${item.days} ${item.hours}:${item.minutes}</p>
             <p>图片</p>
         <#list item.address as addr>
             <img ng-src="{{changeStr('${addr.address}')}}" width="200px" height="200px">
