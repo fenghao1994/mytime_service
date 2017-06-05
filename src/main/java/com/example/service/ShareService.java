@@ -41,9 +41,9 @@ public class ShareService {
                 planItem.setCreateTime((Long) mapArrayList.get(i).get("createTime"));
                 planItem.setEditTime((Long) mapArrayList.get(i).get("editTime"));
                 byte[] b1 = (byte[]) mapArrayList.get(i).get("isEdit");
-                if (b1[0] == 0){
+                if (b1[0] == 0) {
                     planItem.setEdit(false);
-                }else {
+                } else {
                     planItem.setEdit(true);
                 }
                 planItem.setMessageContent((String) mapArrayList.get(i).get("messageContent"));
@@ -51,35 +51,35 @@ public class ShareService {
                 planItem.setLocation((String) mapArrayList.get(i).get("location"));
                 planItem.setPhoneNumberLianXi((String) mapArrayList.get(i).get("phoneNumberLianXi"));
                 byte[] b2 = (byte[]) mapArrayList.get(i).get("isEveryDay");
-                if (b2[0] == 0){
+                if (b2[0] == 0) {
                     planItem.setEveryDay(false);
-                }else {
+                } else {
                     planItem.setEveryDay(true);
                 }
                 byte[] b3 = (byte[]) mapArrayList.get(i).get("isManyDays");
-                if (b3[0] == 0){
+                if (b3[0] == 0) {
                     planItem.setManyDays(false);
-                }else {
+                } else {
                     planItem.setManyDays(true);
                 }
 
                 byte[] b4 = (byte[]) mapArrayList.get(i).get("isExpired");
-                if (b4[0] == 0){
+                if (b4[0] == 0) {
                     planItem.setExpired(false);
-                }else {
+                } else {
                     planItem.setExpired(true);
                 }
 
                 byte[] b5 = (byte[]) mapArrayList.get(i).get("isComplete");
-                if (b5[0] == 0){
+                if (b5[0] == 0) {
                     planItem.setComplete(false);
-                }else {
+                } else {
                     planItem.setComplete(true);
                 }
                 byte[] b6 = (byte[]) mapArrayList.get(i).get("isDelete");
-                if (b6[0] == 0){
+                if (b6[0] == 0) {
                     planItem.setDelete(false);
-                }else {
+                } else {
                     planItem.setDelete(true);
                 }
                 planItem.setYears((Integer) mapArrayList.get(i).get("years"));
@@ -94,13 +94,13 @@ public class ShareService {
         }
 
 
-        for (int i = 0; i< list.size() ;i++){
+        for (int i = 0; i < list.size(); i++) {
             ArrayList<Photo> photos = new ArrayList<>();
             String sql1 = "SELECT * FROM photo WHERE phoneNumber = ? AND createTime = ? AND objectType = ?";
             List<Map<String, Object>> photoMap = new ArrayList<>();
             photoMap = jdbcTemplate.queryForList(sql1, new Object[]{list.get(i).getPhoneNumber(), list.get(i).getCreateTime(), "1"});
-            if (photoMap != null && photoMap.size() > 0){
-                for (int j = 0 ; j < photoMap.size(); j++){
+            if (photoMap != null && photoMap.size() > 0) {
+                for (int j = 0; j < photoMap.size(); j++) {
                     Photo photo = new Photo();
                     photo.setId((Integer) photoMap.get(j).get("id"));
                     photo.setAddress((String) photoMap.get(j).get("address"));
@@ -110,7 +110,7 @@ public class ShareService {
                     photos.add(photo);
                 }
             }
-            list.get(i).setAddress( photos);
+            list.get(i).setAddress(photos);
         }
         return list;
     }
@@ -120,32 +120,32 @@ public class ShareService {
         List<User> list = userService.getAllUser();
         List<String> phoneNumberList = new ArrayList<>();
         //将所有的用户的电话号放入list  contains比对时需要string类型
-        for (int i = 0; i < maps.size(); i++){
+        for (int i = 0; i < maps.size(); i++) {
             phoneNumberList.add(maps.get(i).get("phoneNumber"));
         }
         List<User> friendList = new ArrayList<>();
         //将所有的朋友放入friendList中
-        for (int i = 0 ; i < list.size(); i++){
-            if (phoneNumberList.contains(list.get(i).getPhoneNumber())){
+        for (int i = 0; i < list.size(); i++) {
+            if (phoneNumberList.contains(list.get(i).getPhoneNumber())) {
                 friendList.add(list.get(i));
             }
         }
         //如果friendlilst中有自己的号码 则删掉
-        for (int i = 0; i < friendList.size(); i++){
-            if (friendList.get(i).getPhoneNumber().equals(phoneNumber)){
+        for (int i = 0; i < friendList.size(); i++) {
+            if (friendList.get(i).getPhoneNumber().equals(phoneNumber)) {
                 friendList.remove(i);
             }
         }
         List<FriendShare> listFriendShare = getFriendOpenPlanItem(friendList);
-        for (int i = 0 ;i < listFriendShare.size(); i++){
-            String sql = "SELECT * FROM userrelationshiip WHERE ownPhoneNumber = " + phoneNumber + "  AND otherPhoneNumber = " + listFriendShare.get(i).getPlanItem().getPhoneNumber();
+        for (FriendShare friendShare : listFriendShare) {
+            String sql = "SELECT * FROM userrelationshiip WHERE ownPhoneNumber = " + phoneNumber + "  AND otherPhoneNumber = " + friendShare.getPlanItem().getPhoneNumber();
             List<Map<String, Object>> mapArrayList = new ArrayList<>();
             mapArrayList = jdbcTemplate.queryForList(sql);
             if (mapArrayList != null && mapArrayList.size() > 0) {
-                for (int j = 0; j< mapArrayList.size(); j++){
+                for (int j = 0; j < mapArrayList.size(); j++) {
                     String str = (String) mapArrayList.get(j).get("userActive");
-                    if (str.equals("HITE")){
-                        listFriendShare.remove(i);
+                    if (str.equals("HITE")) {
+                        listFriendShare.remove(friendShare);
                         break;
                     }
                 }
@@ -159,25 +159,25 @@ public class ShareService {
         List<User> list = userService.getAllUser();
         List<String> phoneNumberList = new ArrayList<>();
         //将所有的用户的电话号放入list  contains比对时需要string类型
-        for (int i = 0; i < maps.size(); i++){
+        for (int i = 0; i < maps.size(); i++) {
             phoneNumberList.add(maps.get(i).get("phoneNumber"));
         }
         List<User> friendList = new ArrayList<>();
         //将所有的朋友放入friendList中
-        for (int i = 0 ; i < list.size(); i++){
-            if (phoneNumberList.contains(list.get(i).getPhoneNumber())){
+        for (int i = 0; i < list.size(); i++) {
+            if (phoneNumberList.contains(list.get(i).getPhoneNumber())) {
                 friendList.add(list.get(i));
             }
         }
         //如果friendlilst中有自己的号码 则删掉
-        for (int i = 0; i < friendList.size(); i++){
-            if (friendList.get(i).getPhoneNumber().equals(phoneNumber)){
+        for (int i = 0; i < friendList.size(); i++) {
+            if (friendList.get(i).getPhoneNumber().equals(phoneNumber)) {
                 friendList.remove(i);
             }
         }
         List<Friend> friendRelationship = new ArrayList<>();
         //找出与朋友的关系  关注还是屏蔽还是默认
-        for (int i = 0; i < friendList.size(); i++){
+        for (int i = 0; i < friendList.size(); i++) {
             String active = "WATCH";
             String sql = "SELECT * FROM userrelationshiip WHERE ownPhoneNumber = " + phoneNumber + "  AND otherPhoneNumber = " + friendList.get(i).getPhoneNumber();
 
@@ -189,20 +189,20 @@ public class ShareService {
             }
 
             Friend friend = new Friend();
-            friend.setUser( friendList.get(i));
+            friend.setUser(friendList.get(i));
             friend.setUserActive(active);
             friendRelationship.add(friend);
         }
 
         //获取朋友的标签
-        for (int i = 0; i < friendRelationship.size(); i++){
+        for (int i = 0; i < friendRelationship.size(); i++) {
             List<String> listString = new ArrayList<>();
             Friend friend = friendRelationship.get(i);
             String sql = "SELECT * FROM userlabel WHERE phoneNumber = ?";
             List<Map<String, Object>> mapArrayList = new ArrayList<>();
             mapArrayList = jdbcTemplate.queryForList(sql, new Object[]{friend.getUser().getPhoneNumber()});
-            if (mapArrayList != null && mapArrayList.size() > 0){
-                for (int j = 0; j < mapArrayList.size(); j++){
+            if (mapArrayList != null && mapArrayList.size() > 0) {
+                for (int j = 0; j < mapArrayList.size(); j++) {
                     String str = (String) mapArrayList.get(j).get("label");
                     listString.add(str);
                 }
@@ -318,7 +318,7 @@ public class ShareService {
         if (mapArrayList != null && mapArrayList.size() > 0) {
             String sql1 = "UPDATE userrelationshiip SET userActive = ? WHERE ownPhoneNumber = ? AND otherPhoneNumber = ?";
             jdbcTemplate.update(sql1, new Object[]{userActive, ownPhoneNumber, otherPhoneNumber});
-        }else {
+        } else {
             String sql1 = "INSERT INTO userrelationshiip(ownPhoneNumber, otherPhoneNumber, userActive) VALUES(?, ?, ?)";
             jdbcTemplate.update(sql1, new Object[]{ownPhoneNumber, otherPhoneNumber, userActive});
         }
